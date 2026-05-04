@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SurakshaRoad — Emergency Road Safety</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/Frontend/style.css"/>
+<script src="/Frontend/script.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div ><img class="logo-icon" src="/Frontend/logo.png" alt="SurakshaRoad Logo"></div>
+    <div class="logo-text"><h1>SurakshaRoad</h1><p>Emergency Road Safety</p></div>
+    <button class="lang-toggle">EN ⇅</button>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tabs-inner">
+    <button class="tab-btn active" data-screen="home"      onclick="showScreen('home')">🏠 Home</button>
+    <button class="tab-btn"        data-screen="profile"   onclick="showScreen('profile')">👤 Profile</button>
+    <button class="tab-btn"        data-screen="police"    onclick="guardedNav('police')">🚔 Police</button>
+    <button class="tab-btn"        data-screen="hospital"  onclick="guardedNav('hospital')">🏥 Hospital</button>
+    <button class="tab-btn"        data-screen="emergency" onclick="guardedNav('emergency')">🆘 Emergency</button>
+    <button class="tab-btn"        data-screen="medcard"   onclick="showScreen('medcard')">🪪 Medical Card</button>
+    <button class="tab-btn"        data-screen="firstaid"  onclick="showScreen('firstaid')">🩹 First Aid</button>
+  </div>
+</div>
+
+<main>
+
+<!-- ══════════ HOME ══════════ -->
+<section id="screen-home" class="screen active">
+  <div class="location-banner">
+    <span class="loc-dot"></span>Location detected — NH48, Tambaram, Tamil Nadu
+  </div>
+
+  <div class="victim-toggle">
+    <button class="vtbtn active" id="btn-victim"    onclick="setMode('victim')">I am the victim</button>
+    <button class="vtbtn"        id="btn-bystander" onclick="setMode('bystander')">I am a bystander</button>
+  </div>
+
+  <!-- VICTIM PANEL -->
+  <div id="victim-panel">
+    <div class="mode-banner mode-victim">🔴 Victim mode — your profile &amp; medical card will be shared with responders</div>
+    <div class="service-grid">
+      <button class="service-card ambulance-card" onclick="guardedNav('emergency')">
+        <div class="icon">🚑</div><div class="svc-name">Ambulance</div><div class="svc-sub">Direct call</div>
+      </button>
+      <button class="service-card police-card" onclick="guardedNav('police')">
+        <div class="icon">👮</div><div class="svc-name">Police</div><div class="svc-sub">Stations nearby</div>
+      </button>
+      <button class="service-card hospital-card" onclick="guardedNav('hospital')">
+        <div class="icon">🏥</div><div class="svc-name">Hospital</div><div class="svc-sub">Hospitals nearby</div>
+      </button>
+      <button class="service-card emergency-card" onclick="guardedNav('emergency')">
+        <div class="icon">🆘</div><div class="svc-name">Emergency</div><div class="svc-sub">All services</div>
+      </button>
+    </div>
+    <div class="medical-card-strip">
+      <div class="mc-info">
+        <strong>Arjun Mehta</strong>
+        <div class="mc-badges">
+          <div class="mc-badge"><b>Blood</b><span class="val-blood">B+</span></div>
+          <div class="mc-badge"><b>Allergy</b><span class="val-allergy">Penicillin</span></div>
+          <div class="mc-badge"><b>Condition</b><span class="val-cond">Diabetes</span></div>
+        </div>
+      </div>
+      <span class="mc-tag" style="cursor:pointer" onclick="showScreen('medcard')">Medical card</span>
+    </div>
+  </div>
+
+  <!-- BYSTANDER PANEL -->
+  <div id="bystander-panel" style="display:none">
+    <div class="mode-banner mode-bystander">🔵 Bystander mode — only your GPS location is shared, not personal data</div>
+    <div class="bystander-note">
+      ⚠️ As a bystander you must <strong>verify with a photo</strong> before any alert fires — this prevents false emergency calls.<br><br>
+      🔒 <strong>You will not see or access the victim's personal or medical data.</strong> Only the accident's GPS location is sent to responders.
+    </div>
+    <div class="service-grid">
+      <button class="service-card ambulance-card" onclick="openGate('emergency')">
+        <div class="icon">🚑</div><div class="svc-name">Ambulance</div><div class="svc-sub">Report accident</div>
+      </button>
+      <button class="service-card police-card" onclick="openGate('police')">
+        <div class="icon">👮</div><div class="svc-name">Police</div><div class="svc-sub">Report accident</div>
+      </button>
+      <button class="service-card hospital-card" onclick="openGate('hospital')">
+        <div class="icon">🏥</div><div class="svc-name">Hospital</div><div class="svc-sub">Report accident</div>
+      </button>
+      <button class="service-card emergency-card" onclick="openGate('emergency')">
+        <div class="icon">🆘</div><div class="svc-name">Emergency</div><div class="svc-sub">All services</div>
+      </button>
+    </div>
+  </div>
+
+  <div class="signal-banner">📶 Low signal — using cached data</div>
+</section>
+
+
+<!-- ══════════ GATE MODAL (bystander photo verify) ══════════ -->
+<div class="gate-overlay" id="gate-overlay" onclick="closeGateIfOutside(event)">
+  <div class="gate-sheet" id="gate-sheet">
+    <div class="gate-handle"></div>
+    <div class="gate-title">📸 Verify before reporting</div>
+    <div class="gate-sub">Take or upload a photo of the accident. AI will verify it before any alert is sent to emergency services.</div>
+
+    <div class="gate-steps">
+      <div class="gate-step-row">
+        <div class="gate-step-num">1</div>
+        <div class="gate-step-text"><strong>Take or upload a photo</strong><p>Must clearly show the accident scene</p></div>
+      </div>
+      <div class="gate-step-row">
+        <div class="gate-step-num">2</div>
+        <div class="gate-step-text"><strong>AI verifies the photo</strong><p>Prevents false or prank alerts to emergency services</p></div>
+      </div>
+      <div class="gate-step-row">
+        <div class="gate-step-num">3</div>
+        <div class="gate-step-text"><strong>30-second cancel window</strong><p>You can cancel immediately if it was a mistake</p></div>
+      </div>
+    </div>
+
+    <div class="gate-info-box">
+      <b>🔒 Your privacy as a bystander</b>
+      Only the <strong>GPS location of the accident</strong> is sent to responders — your name, phone, and identity are never shared. The victim's medical records are <strong>completely private</strong> and inaccessible to you.
+    </div>
+
+    <div id="gate-photo-zone">
+      <div class="photo-upload" onclick="triggerGateUpload()">
+        <div class="pu-icon">📷</div>
+        <p>Tap to take or upload a photo<br>of the accident scene</p>
+      </div>
+      <input type="file" id="gate-file-input" accept="image/*" style="display:none" onchange="gatePhotoSelected()"/>
+      <div class="photo-btns">
+        <button class="btn-primary" onclick="triggerGateUpload()">📷 Take photo</button>
+        <button class="btn-outline" onclick="triggerGateUpload()">Upload photo</button>
+      </div>
+    </div>
+
+    <div id="gate-verifying" class="ai-verifying" style="display:none">🤖 AI is verifying the photo… please wait</div>
+    <div id="gate-confirmed" class="ai-confirmed" style="display:none">✅ Accident confirmed — alert will be sent in:</div>
+    <div id="gate-countdown-box" class="countdown-box" style="display:none">
+      <div class="countdown-num" id="gate-countdown-num">47</div>
+      <p>seconds before alert fires</p>
+    </div>
+    <button id="gate-cancel-btn" class="cancel-btn" style="display:none" onclick="cancelGateAlert()">Cancel — this was a mistake</button>
+    <p class="gps-note" style="margin-top:.5rem">Photo GPS-tagged &amp; timestamped · Your identity stays anonymous</p>
+    <button class="btn-outline" onclick="closeGate()" style="margin-top:.75rem">← Go back</button>
+  </div>
+</div>
+
+
+<!-- ══════════ PROFILE ══════════ -->
+<section id="screen-profile" class="screen">
+  <div id="profile-step-1">
+    <div class="progress-bar"><span class="done"></span><span></span><span></span></div>
+    <div class="screen-title">Personal information</div>
+    <div class="screen-sub">Step 1 of 3 — Basic details</div>
+    <div class="section-label">YOUR DETAILS</div>
+    <div class="field"><label>Full name</label><input type="text" value="Arjun Mehta"/></div>
+    <div class="field"><label>Age</label><input type="number" value="24"/></div>
+    <div class="field"><label>Gender</label><select><option>Male</option><option>Female</option><option>Other</option></select></div>
+    <div class="field"><label>Phone number</label><input type="tel" value="+91 98765 43210"/></div>
+    <div class="field"><label>Home address</label><input type="text" placeholder="Enter address…"/></div>
+    <div class="section-label">EMERGENCY CONTACT</div>
+    <div class="field"><label>Contact name</label><input type="text" value="Priya Mehta"/></div>
+    <div class="field"><label>Relationship</label><input type="text" value="Sister"/></div>
+    <div class="field"><label>Contact phone</label><input type="tel" value="+91 91234 56789"/></div>
+    <div class="section-label">PREFERRED LANGUAGE</div>
+    <div class="lang-chips">
+      <span class="lang-chip active">English</span>
+      <span class="lang-chip">हिंदी</span><span class="lang-chip">தமிழ்</span>
+      <span class="lang-chip">తెలుగు</span><span class="lang-chip">বাংলা</span><span class="lang-chip">ಕನ್ನಡ</span>
+    </div>
+    <button class="btn-primary" onclick="profileStep(2)">Next →</button>
+  </div>
+
+  <div id="profile-step-2" style="display:none">
+    <div class="progress-bar"><span class="done"></span><span class="done"></span><span></span></div>
+    <div class="screen-title">Medical information</div>
+    <div class="screen-sub">Step 2 of 3 — Helps paramedics treat you faster</div>
+    <div class="section-label">BLOOD GROUP</div>
+    <div class="chips">
+      <span class="chip" onclick="selectChip(this)">A+</span><span class="chip active" onclick="selectChip(this)">B+</span>
+      <span class="chip" onclick="selectChip(this)">O+</span><span class="chip" onclick="selectChip(this)">AB+</span>
+      <span class="chip" onclick="selectChip(this)">A−</span><span class="chip" onclick="selectChip(this)">B−</span>
+      <span class="chip" onclick="selectChip(this)">O−</span><span class="chip" onclick="selectChip(this)">AB−</span>
+    </div>
+    <div class="section-label">KNOWN ALLERGIES</div>
+    <div class="field"><label>Allergy / medication allergy</label><input type="text" value="Penicillin"/></div>
+    <div class="section-label">CHRONIC CONDITIONS</div>
+    <div class="field"><label>e.g. diabetes, asthma, epilepsy</label><input type="text" value="Type 2 Diabetes"/></div>
+    <div class="section-label">CURRENT MEDICATIONS</div>
+    <div class="field"><label>Medication name + dosage</label><input type="text" value="Metformin 500mg"/></div>
+    <div class="section-label">PAST SURGERIES / MAJOR INJURIES</div>
+    <div class="field"><label>Brief description</label><input type="text" placeholder="e.g. appendectomy 2019…"/></div>
+    <div class="section-label">INSURANCE</div>
+    <div class="field"><label>Provider</label><input type="text" value="Star Health"/></div>
+    <div class="field"><label>Policy number</label><input type="text" value="SH-2024-887766"/></div>
+    <button class="btn-primary" onclick="profileStep(3)">Next →</button>
+    <button class="btn-outline" onclick="profileStep(1)">← Back</button>
+  </div>
+
+  <div id="profile-step-3" style="display:none">
+    <div class="progress-bar"><span class="done"></span><span class="done"></span><span class="done"></span></div>
+    <div class="screen-title">All set! 🎉</div>
+    <div class="screen-sub">Step 3 of 3 — Your profile is ready</div>
+    <div class="card" style="text-align:center;padding:2rem 1rem">
+      <div style="font-size:3rem;margin-bottom:.75rem">✅</div>
+      <p style="font-size:1rem;font-weight:700;margin-bottom:.4rem">Profile saved successfully</p>
+      <p style="font-size:.85rem;color:var(--muted)">Your medical card is now ready to share with emergency responders.</p>
+    </div>
+    <button class="btn-primary" onclick="showScreen('home')">Go to Home</button>
+    <button class="btn-outline" onclick="showScreen('medcard')">View Medical Card</button>
+  </div>
+</section>
+
+
+<!-- ══════════ POLICE ══════════ -->
+<section id="screen-police" class="screen">
+  <!-- Victim view -->
+  <div id="police-v" style="display:none">
+    <div class="mode-banner mode-victim">🔴 Victim mode — your GPS location will be shared on call</div>
+    <div class="sos-banner blue"><h2>SOS — Call 100</h2><p>Nearest police station — direct call</p></div>
+    <div class="map-placeholder">🗺️ Map — 3 stations shown</div>
+    <div class="nearby-label">NEARBY POLICE STATIONS</div>
+    <div class="station-row">
+      <div class="station-info"><strong>Tambaram East Police Station</strong><p>ETA ~4 min · 044-2226 0100</p></div>
+      <span class="station-dist">1.2 km</span><button class="call-btn" onclick="fakeCall('044-2226 0100')">Call</button>
+    </div>
+    <div class="station-row">
+      <div class="station-info"><strong>Chromepet Police Station</strong><p>ETA ~8 min · 044-2264 0200</p></div>
+      <span class="station-dist">2.8 km</span><button class="call-btn" onclick="fakeCall('044-2264 0200')">Call</button>
+    </div>
+    <div class="station-row">
+      <div class="station-info"><strong>Pallavaram Traffic Police</strong><p>ETA ~11 min · 044-2264 1100</p></div>
+      <span class="station-dist">4.1 km</span><button class="call-btn" onclick="fakeCall('044-2264 1100')">Call</button>
+    </div>
+    <div class="gps-notice">📍 Your GPS location will be shared when you call</div>
+  </div>
+  <!-- Bystander view (only shown after verification) -->
+  <div id="police-b" style="display:none">
+    <div class="mode-banner mode-bystander">🔵 Bystander — verified ✅ · Reporting accident location only</div>
+    <div class="bystander-gps"><b>📍 Accident GPS location being sent</b>NH48, Tambaram, Tamil Nadu — coordinates attached to your report</div>
+    <div class="sos-banner blue"><h2>SOS — Call 100</h2><p>Reporting accident at detected GPS location</p></div>
+    <div class="map-placeholder">🗺️ Map — 3 stations shown</div>
+    <div class="nearby-label">NEARBY POLICE STATIONS</div>
+    <div class="station-row">
+      <div class="station-info"><strong>Tambaram East Police Station</strong><p>ETA ~4 min · 044-2226 0100</p></div>
+      <span class="station-dist">1.2 km</span><button class="call-btn" onclick="fakeCall('044-2226 0100')">Call</button>
+    </div>
+    <div class="station-row">
+      <div class="station-info"><strong>Chromepet Police Station</strong><p>ETA ~8 min · 044-2264 0200</p></div>
+      <span class="station-dist">2.8 km</span><button class="call-btn" onclick="fakeCall('044-2264 0200')">Call</button>
+    </div>
+    <div class="gps-notice">🔒 Only accident GPS shared — your identity &amp; victim's data are private</div>
+  </div>
+</section>
+
+
+<!-- ══════════ HOSPITAL ══════════ -->
+<section id="screen-hospital" class="screen">
+  <div id="hospital-v" style="display:none">
+    <div class="mode-banner mode-victim">🔴 Victim mode — medical card will be sent on call</div>
+    <div class="sos-banner red"><h2>SOS — Call nearest trauma centre</h2><p>Gleneagles Hospital · 1.4 km away</p></div>
+    <div class="ai-rec"><strong>AI recommendation</strong>Gleneagles ranked first — nearest Level 1 trauma centre with a neurology unit, suitable for head injuries.</div>
+    <div class="nearby-label">HOSPITALS NEARBY</div>
+    <div class="hosp-row">
+      <div class="hosp-top"><strong>Gleneagles Global Hospital</strong><span class="hosp-dist">1.4 km</span></div>
+      <span class="hosp-tag tag-l1">Level 1 Trauma</span>
+      <div class="hosp-meta"><span>ETA ~5 min · 044-4477 7000</span><button class="call-btn red-call" onclick="fakeCall('044-4477 7000')">Call</button></div>
+      <a class="nav-link">Take me there ↗</a>
+    </div>
+    <div class="hosp-row">
+      <div class="hosp-top"><strong>Govt. Chromepet Hospital</strong><span class="hosp-dist">2.1 km</span></div>
+      <span class="hosp-tag tag-gov">Government</span>
+      <div class="hosp-meta"><span>ETA ~7 min · 044-2264 3300</span><button class="call-btn" onclick="fakeCall('044-2264 3300')">Call</button></div>
+      <a class="nav-link">Take me there ↗</a>
+    </div>
+    <div class="gps-notice">🪪 Your medical card will be sent to hospital on call</div>
+  </div>
+  <div id="hospital-b" style="display:none">
+    <div class="mode-banner mode-bystander">🔵 Bystander — verified ✅ · Reporting accident location only</div>
+    <div class="bystander-gps"><b>📍 Accident GPS location being sent</b>NH48, Tambaram, Tamil Nadu — hospitals alerted to the accident scene</div>
+    <div class="bystander-note">ℹ️ The victim's medical information is private. You are reporting the accident location — hospitals will dispatch to your GPS coordinates.</div>
+    <div class="sos-banner red"><h2>SOS — Nearest trauma centre alerted</h2><p>GPS location of accident sent</p></div>
+    <div class="hosp-row">
+      <div class="hosp-top"><strong>Gleneagles Global Hospital</strong><span class="hosp-dist">1.4 km</span></div>
+      <span class="hosp-tag tag-l1">Level 1 Trauma</span>
+      <div class="hosp-meta"><span>ETA ~5 min · 044-4477 7000</span><button class="call-btn red-call" onclick="fakeCall('044-4477 7000')">Call</button></div>
+    </div>
+    <div class="hosp-row">
+      <div class="hosp-top"><strong>Govt. Chromepet Hospital</strong><span class="hosp-dist">2.1 km</span></div>
+      <span class="hosp-tag tag-gov">Government</span>
+      <div class="hosp-meta"><span>ETA ~7 min · 044-2264 3300</span><button class="call-btn" onclick="fakeCall('044-2264 3300')">Call</button></div>
+    </div>
+    <div class="gps-notice">🔒 Victim's medical data not shared — accident GPS only</div>
+  </div>
+</section>
+
+
+<!-- ══════════ EMERGENCY ══════════ -->
+<section id="screen-emergency" class="screen">
+  <div id="emergency-v" style="display:none">
+    <div class="mode-banner mode-victim">🔴 Victim mode — all alerts use your profile data</div>
+    <div class="sos-big victim-sos">
+      <div class="sos-icon red-icon">SOS</div>
+      <h2>Call 112 + Ambulance</h2><p>Fires both simultaneously</p>
+    </div>
+    <div class="action-grid">
+      <button class="action-btn"><div class="ab-icon">💬</div><div class="ab-name">WhatsApp</div><div class="ab-sub">Alert contacts</div></button>
+      <button class="action-btn"><div class="ab-icon">📍</div><div class="ab-name">Live location</div><div class="ab-sub">30 min share</div></button>
+      <button class="action-btn" onclick="showScreen('medcard')"><div class="ab-icon">📋</div><div class="ab-name">Medical card</div><div class="ab-sub">Send card</div></button>
+    </div>
+    <div class="section-label">ALERT STATUS</div>
+    <div class="alert-row"><div class="alert-info"><strong>Ambulance 108</strong><p>SMS with GPS sent</p></div><span class="status-badge sent">Sent</span></div>
+    <div class="alert-row"><div class="alert-info"><strong>Priya Mehta (Sister)</strong><p>WhatsApp alert + location</p></div><span class="status-badge sent">Sent</span></div>
+    <div class="alert-row"><div class="alert-info"><strong>Live location link</strong><p>Active for 28 min</p></div><span class="status-badge live pulse">Live</span></div>
+  </div>
+
+  <div id="emergency-b" style="display:none">
+    <div class="mode-banner mode-bystander">🔵 Bystander — verified ✅ · Anonymous report sent</div>
+    <div class="bystander-gps"><b>📍 Accident GPS location confirmed</b>NH48, Tambaram, Tamil Nadu · Photo evidence attached</div>
+    <div class="sos-big bystander-sos">
+      <div class="sos-icon blue-icon">SOS</div>
+      <h2>Accident Reported</h2><p>GPS location + photo evidence sent to responders</p>
+    </div>
+    <div class="action-grid">
+      <button class="action-btn"><div class="ab-icon">💬</div><div class="ab-name">WhatsApp</div><div class="ab-sub">Share location</div></button>
+      <button class="action-btn"><div class="ab-icon">📍</div><div class="ab-name">Live location</div><div class="ab-sub">30 min share</div></button>
+      <button class="action-btn"><div class="ab-icon">📸</div><div class="ab-name">Photo</div><div class="ab-sub">Evidence saved</div></button>
+    </div>
+    <div class="section-label">ALERT STATUS</div>
+    <div class="alert-row"><div class="alert-info"><strong>Ambulance 108</strong><p>GPS of accident sent — no victim data</p></div><span class="status-badge sent">Sent</span></div>
+    <div class="alert-row"><div class="alert-info"><strong>Police Control Room 100</strong><p>Accident reported with photo + GPS</p></div><span class="status-badge sent">Sent</span></div>
+    <div class="alert-row"><div class="alert-info"><strong>Live location link</strong><p>Active for 28 min</p></div><span class="status-badge live pulse">Live</span></div>
+    <div class="gps-notice" style="margin-top:.5rem">🔒 Anonymous report — only GPS + verified photo sent</div>
+  </div>
+</section>
+
+
+<!-- ══════════ MEDICAL CARD ══════════ -->
+<section id="screen-medcard" class="screen">
+  <div class="works-offline">✅ Works offline — no login needed</div>
+  <div class="card">
+    <div class="mc-header">
+      <div class="mc-avatar">AM</div>
+      <div><div class="mc-name">Arjun Mehta</div><div class="mc-detail">Male, 24 years · +91 98765 43210</div></div>
+    </div>
+    <div class="mc-grid">
+      <div class="mc-field"><label>Blood group</label><div class="mc-val blood">B+</div></div>
+      <div class="mc-field"><label>Allergies</label><p>Penicillin</p></div>
+      <div class="mc-field"><label>Condition</label><p>Type 2 Diabetes</p></div>
+      <div class="mc-field"><label>Medication</label><p>Metformin 500mg</p></div>
+    </div>
+    <div class="mc-full"><label>Emergency contact</label><p>Priya Mehta (Sister) · +91 91234 56789</p></div>
+    <div class="mc-full"><label>Insurance</label><p>Star Health · SH-2024-887766</p></div>
+  </div>
+  <button class="btn-primary">Share medical card via WhatsApp</button>
+</section>
+
+
+<!-- ══════════ FIRST AID ══════════ -->
+<section id="screen-firstaid" class="screen">
+  <div class="screen-title">First aid guide</div>
+  <div class="screen-sub">Fully offline — follow these steps while waiting for help</div>
+  <div class="fa-tabs">
+    <button class="fa-tab active" onclick="setFATab(this,'bleeding')">Bleeding</button>
+    <button class="fa-tab" onclick="setFATab(this,'fracture')">Fracture</button>
+    <button class="fa-tab" onclick="setFATab(this,'unconscious')">Unconscious</button>
+  </div>
+  <div id="fa-bleeding">
+    <div class="fa-step"><div class="step-num">1</div><div class="step-body"><strong>Stay calm and call for help immediately if not done yet</strong></div></div>
+    <div class="fa-step"><div class="step-num">2</div><div class="step-body"><strong>Apply firm pressure on the wound using a cloth or clothing</strong><p>Do not remove the cloth if it soaks through — add more on top</p></div></div>
+    <div class="fa-step"><div class="step-num">3</div><div class="step-body"><strong>Elevate the injured limb above heart level if possible</strong></div></div>
+    <div class="fa-step"><div class="step-num">4</div><div class="step-body"><strong>Keep the person warm and still — do not offer food or water</strong></div></div>
+    <div class="fa-step"><div class="step-num">5</div><div class="step-body"><strong>Monitor breathing until ambulance arrives</strong></div></div>
+  </div>
+  <div id="fa-fracture" style="display:none">
+    <div class="fa-step"><div class="step-num">1</div><div class="step-body"><strong>Do not try to straighten the bone</strong></div></div>
+    <div class="fa-step"><div class="step-num">2</div><div class="step-body"><strong>Immobilise the area using splints or rolled clothing</strong></div></div>
+    <div class="fa-step"><div class="step-num">3</div><div class="step-body"><strong>Apply an ice pack wrapped in cloth to reduce swelling</strong></div></div>
+    <div class="fa-step"><div class="step-num">4</div><div class="step-body"><strong>Keep the person still and comfortable until help arrives</strong></div></div>
+  </div>
+  <div id="fa-unconscious" style="display:none">
+    <div class="fa-step"><div class="step-num">1</div><div class="step-body"><strong>Check if the person is breathing — look, listen, feel</strong></div></div>
+    <div class="fa-step"><div class="step-num">2</div><div class="step-body"><strong>Place in recovery position if breathing — tilt head back gently</strong></div></div>
+    <div class="fa-step"><div class="step-num">3</div><div class="step-body"><strong>Begin CPR if not breathing — 30 compressions, 2 rescue breaths</strong></div></div>
+    <div class="fa-step"><div class="step-num">4</div><div class="step-body"><strong>Do not give water or food; keep them warm until ambulance arrives</strong></div></div>
+  </div>
+</section>
+
+</main>
+</body>
+</html>
