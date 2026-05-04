@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "name": "Gleneagles Global Hospital",
+    "type": "hospital",
+    "lat": 12.9516,
+    "lon": 80.1462,
+    "phone": "04444777000",
+    "level": "Level 1 Trauma"
+  },
+  {
+    "id": 2,
+    "name": "Govt. Chromepet Hospital",
+    "type": "hospital",
+    "lat": 12.9529,
+    "lon": 80.1418,
+    "phone": "04422643300",
+    "level": "Government"
+  },
+  {
+    "id": 3,
+    "name": "Tambaram East Police Station",
+    "type": "police",
+    "lat": 12.9230,
+    "lon": 80.1278,
+    "phone": "04422260100"
+  },
+  {
+    "id": 4,
+    "name": "Chromepet Police Station",
+    "type": "police",
+    "lat": 12.9512,
+    "lon": 80.1440,
+    "phone": "04422640200"
+  },
+  {
+    "id": 5,
+    "name": "Ambulance 108 Tambaram",
+    "type": "ambulance",
+    "lat": 12.9250,
+    "lon": 80.1300,
+    "phone": "108"
+  }
+]
