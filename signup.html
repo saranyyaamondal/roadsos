@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SurakshaRoad — Sign Up</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red:        #C62828;
+      --red-light:  #FFEBEE;
+      --red-dark:   #8B0000;
+      --green:      #2E7D32;
+      --green-light:#E8F5E9;
+      --white:      #FFFFFF;
+      --bg:         #F7F7F7;
+      --border:     #E0E0E0;
+      --text:       #1A1A1A;
+      --muted:      #757575;
+      --card:       #FFFFFF;
+      --radius:     14px;
+      --radius-sm:  8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: var(--red);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(198,40,40,0.3);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Baloo 2', cursive;
+      font-size: 18px;
+      color: var(--red);
+      font-weight: 800;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .logo-text { color: white; }
+    .logo-name {
+      font-family: 'Baloo 2', cursive;
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+    .logo-sub {
+      font-size: 10px;
+      opacity: 0.8;
+      font-weight: 500;
+    }
+
+    /* ── PROGRESS BAR ── */
+    .progress-wrap {
+      background: white;
+      padding: 16px 20px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .step-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .step-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color 0.3s;
+    }
+    .step-label.active { color: var(--red); }
+    .step-label.done   { color: var(--green); }
+    .progress-bar {
+      display: flex;
+      gap: 6px;
+    }
+    .progress-seg {
+      flex: 1;
+      height: 5px;
+      border-radius: 3px;
+      background: var(--border);
+      transition: background 0.4s ease;
+    }
+    .progress-seg.active { background: var(--red); }
+    .progress-seg.done   { background: var(--green); }
+
+    /* ── MAIN CONTENT ── */
+    .content {
+      flex: 1;
+      padding: 20px 16px 40px;
+      max-width: 500px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* ── STEP SECTION ── */
+    .step-section { display: none; animation: fadeUp 0.35s ease; }
+    .step-section.visible { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-header {
+      margin-bottom: 20px;
+    }
+    .step-title {
+      font-family: 'Baloo 2', cursive;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .step-sub {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin: 18px 0 8px;
+    }
+
+    /* ── FIELD ── */
+    .field {
+      margin-bottom: 12px;
+    }
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+    .field label .req {
+      color: var(--red);
+      margin-left: 2px;
+    }
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--card);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+    }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(198,40,40,0.1);
+    }
+    .field input::placeholder { color: #BDBDBD; }
+    .field textarea { resize: none; height: 72px; }
+
+    /* Gender row */
+    .gender-row {
+      display: flex;
+      gap: 8px;
+    }
+    .gender-btn {
+      flex: 1;
+      padding: 11px 8px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--card);
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .gender-btn.selected {
+      border-color: var(--red);
+      background: var(--red-light);
+      color: var(--red);
+    }
+
+    /* ── BLOOD GROUP CHIPS ── */
+    .blood-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .blood-chip {
+      padding: 10px 6px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--card);
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .blood-chip.selected {
+      border-color: var(--red);
+      background: var(--red);
+      color: white;
+      box-shadow: 0 2px 8px rgba(198,40,40,0.3);
+      transform: scale(1.05);
+    }
+
+    /* ── LANGUAGE CHIPS ── */
+    .lang-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .lang-chip {
+      padding: 8px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      background: var(--card);
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lang-chip.selected {
+      border-color: var(--green);
+      background: var(--green);
+      color: white;
+      box-shadow: 0 2px 8px rgba(46,125,50,0.3);
+    }
+
+    /* ── INFO BOX ── */
+    .info-box {
+      background: var(--green-light);
+      border: 1px solid #A5D6A7;
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .info-box-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .info-box-text { font-size: 12px; color: var(--green); font-weight: 600; line-height: 1.5; }
+
+    /* ── CONFIRM CARD (step 3 summary) ── */
+    .confirm-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .confirm-card-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 10px;
+    }
+    .confirm-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 6px 0;
+      border-bottom: 1px solid #F5F5F5;
+    }
+    .confirm-row:last-child { border-bottom: none; }
+    .confirm-key   { font-size: 12px; color: var(--muted); font-weight: 600; }
+    .confirm-val   { font-size: 12px; color: var(--text);  font-weight: 700; text-align: right; max-width: 60%; }
+    .confirm-val.blood { color: var(--red); font-size: 15px; }
+
+    /* ── BUTTONS ── */
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .btn-back {
+      flex: 0 0 auto;
+      padding: 14px 20px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-back:hover { border-color: var(--red); color: var(--red); }
+
+    .btn-next {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--red);
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(198,40,40,0.35);
+      letter-spacing: 0.3px;
+    }
+    .btn-next:hover {
+      background: var(--red-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(198,40,40,0.4);
+    }
+    .btn-next:active { transform: translateY(0); }
+
+    .btn-finish {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--green);
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(46,125,50,0.35);
+    }
+    .btn-finish:hover {
+      background: #1B5E20;
+      transform: translateY(-1px);
+    }
+
+    /* ── ERROR MESSAGE ── */
+    .error-msg {
+      display: none;
+      background: #FFEBEE;
+      border: 1px solid #EF9A9A;
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--red);
+      margin-top: 12px;
+    }
+    .error-msg.visible { display: block; animation: shake 0.3s ease; }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25%       { transform: translateX(-6px); }
+      75%       { transform: translateX(6px); }
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 20px 0;
+    }
+
+    /* ── OPTIONAL TAG ── */
+    .optional {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      background: #F5F5F5;
+      padding: 2px 7px;
+      border-radius: 999px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 360px) {
+      .blood-grid { grid-template-columns: repeat(4, 1fr); gap: 5px; }
+      .blood-chip { font-size: 12px; padding: 8px 4px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">+</div>
+    <div class="logo-text">
+      <div class="logo-name">SurakshaRoad</div>
+      <div class="logo-sub">Emergency Road Safety</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-wrap">
+  <div class="step-labels">
+    <span class="step-label active" id="lbl-1">Personal info</span>
+    <span class="step-label"        id="lbl-2">Medical history</span>
+    <span class="step-label"        id="lbl-3">Insurance</span>
+  </div>
+  <div class="progress-bar">
+    <div class="progress-seg active" id="seg-1"></div>
+    <div class="progress-seg"        id="seg-2"></div>
+    <div class="progress-seg"        id="seg-3"></div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="content">
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- STEP 1 — PERSONAL INFO                 -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="step-section" id="step-1">
+    <div class="step-header">
+      <div class="step-title">Personal information</div>
+      <div class="step-sub">Step 1 of 3 — Tell us about yourself</div>
+    </div>
+
+    <div class="section-label">Your details</div>
+
+    <div class="field">
+      <label>Full name <span class="req">*</span></label>
+      <input id="input-name" type="text" placeholder="e.g. Arjun Mehta">
+    </div>
+
+    <div style="display:flex; gap:12px;">
+      <div class="field" style="flex:1;">
+        <label>Age <span class="req">*</span></label>
+        <input id="input-age" type="number" placeholder="e.g. 24" min="1" max="120">
+      </div>
+      <div class="field" style="flex:2;">
+        <label>Gender <span class="req">*</span></label>
+        <div class="gender-row">
+          <button class="gender-btn selected" data-gender="Male"   onclick="selectGender(this)">Male</button>
+          <button class="gender-btn"          data-gender="Female" onclick="selectGender(this)">Female</button>
+          <button class="gender-btn"          data-gender="Other"  onclick="selectGender(this)">Other</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Phone number <span class="req">*</span></label>
+      <input id="input-phone" type="tel" placeholder="e.g. +91 98765 43210">
+    </div>
+
+    <div class="field">
+      <label>Home address <span class="optional">optional</span></label>
+      <input id="input-address" type="text" placeholder="e.g. 12 Gandhi Nagar, Chennai">
+    </div>
+
+    <div class="section-label">Emergency contact</div>
+
+    <div class="info-box">
+      <div class="info-box-icon">ℹ️</div>
+      <div class="info-box-text">This person will be automatically alerted with your GPS location if you press the Emergency button.</div>
+    </div>
+
+    <div class="field">
+      <label>Contact name <span class="req">*</span></label>
+      <input id="input-ec-name" type="text" placeholder="e.g. Priya Mehta">
+    </div>
+
+    <div style="display:flex; gap:12px;">
+      <div class="field" style="flex:1;">
+        <label>Relationship <span class="req">*</span></label>
+        <input id="input-ec-rel" type="text" placeholder="e.g. Sister">
+      </div>
+      <div class="field" style="flex:1;">
+        <label>Their phone <span class="req">*</span></label>
+        <input id="input-ec-phone" type="tel" placeholder="+91 ...">
+      </div>
+    </div>
+
+    <div class="section-label">Preferred language</div>
+    <div class="lang-grid" id="lang-grid">
+      <button class="lang-chip selected" data-lang="en" onclick="selectLanguage(this)">English</button>
+      <button class="lang-chip"          data-lang="hi" onclick="selectLanguage(this)">हिंदी</button>
+      <button class="lang-chip"          data-lang="ta" onclick="selectLanguage(this)">தமிழ்</button>
+      <button class="lang-chip"          data-lang="te" onclick="selectLanguage(this)">తెలుగు</button>
+      <button class="lang-chip"          data-lang="bn" onclick="selectLanguage(this)">বাংলা</button>
+      <button class="lang-chip"          data-lang="kn" onclick="selectLanguage(this)">ಕನ್ನಡ</button>
+      <button class="lang-chip"          data-lang="ml" onclick="selectLanguage(this)">മലയാളം</button>
+      <button class="lang-chip"          data-lang="mr" onclick="selectLanguage(this)">मराठी</button>
+    </div>
+
+    <div class="error-msg" id="err-1">Please fill in all required fields marked with *</div>
+
+    <div class="btn-row">
+      <button class="btn-next" onclick="saveStep1()">Next — Medical info →</button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- STEP 2 — MEDICAL HISTORY               -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="step-section" id="step-2">
+    <div class="step-header">
+      <div class="step-title">Medical information</div>
+      <div class="step-sub">Step 2 of 3 — Helps paramedics treat you faster</div>
+    </div>
+
+    <div class="info-box">
+      <div class="info-box-icon">🏥</div>
+      <div class="info-box-text">This information is stored only on your phone and is shown to paramedics or hospitals during an emergency. Nothing is sent to any server.</div>
+    </div>
+
+    <div class="section-label">Blood group <span style="color:var(--red);">*</span></div>
+    <div class="blood-grid">
+      <button class="blood-chip" data-value="A+"  onclick="selectBlood(this)">A+</button>
+      <button class="blood-chip" data-value="B+"  onclick="selectBlood(this)">B+</button>
+      <button class="blood-chip" data-value="O+"  onclick="selectBlood(this)">O+</button>
+      <button class="blood-chip" data-value="AB+" onclick="selectBlood(this)">AB+</button>
+      <button class="blood-chip" data-value="A-"  onclick="selectBlood(this)">A−</button>
+      <button class="blood-chip" data-value="B-"  onclick="selectBlood(this)">B−</button>
+      <button class="blood-chip" data-value="O-"  onclick="selectBlood(this)">O−</button>
+      <button class="blood-chip" data-value="AB-" onclick="selectBlood(this)">AB−</button>
+    </div>
+
+    <div class="section-label">Known allergies <span class="optional">optional</span></div>
+    <div class="field">
+      <input id="input-allergies" type="text" placeholder="e.g. Penicillin, Aspirin, Ibuprofen">
+    </div>
+
+    <div class="section-label">Chronic conditions <span class="optional">optional</span></div>
+    <div class="field">
+      <input id="input-conditions" type="text" placeholder="e.g. Type 2 Diabetes, Asthma, Epilepsy">
+    </div>
+
+    <div class="section-label">Current medications <span class="optional">optional</span></div>
+    <div class="field">
+      <input id="input-medications" type="text" placeholder="e.g. Metformin 500mg, Atorvastatin 10mg">
+    </div>
+
+    <div class="section-label">Past surgeries or major injuries <span class="optional">optional</span></div>
+    <div class="field">
+      <textarea id="input-surgeries" placeholder="e.g. Appendectomy 2019, Right knee surgery 2021"></textarea>
+    </div>
+
+    <div class="error-msg" id="err-2">Please select your blood group before continuing.</div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="showStep(1)">← Back</button>
+      <button class="btn-next" onclick="saveStep2()">Next — Insurance →</button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- STEP 3 — INSURANCE + CONFIRMATION      -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="step-section" id="step-3">
+    <div class="step-header">
+      <div class="step-title">Almost done!</div>
+      <div class="step-sub">Step 3 of 3 — Insurance details & confirmation</div>
+    </div>
+
+    <div class="section-label">Insurance details <span class="optional">optional</span></div>
+    <div class="info-box">
+      <div class="info-box-icon">📋</div>
+      <div class="info-box-text">Adding your insurance details helps hospitals start your admission paperwork faster during an emergency.</div>
+    </div>
+
+    <div class="field">
+      <label>Insurance provider</label>
+      <input id="input-insurance" type="text" placeholder="e.g. Star Health, HDFC Ergo, Bajaj Allianz">
+    </div>
+    <div class="field">
+      <label>Policy number</label>
+      <input id="input-policy" type="text" placeholder="e.g. SH-2024-887766">
+    </div>
+
+    <hr class="divider">
+
+    <div class="section-label">Confirm your details</div>
+
+    <div class="confirm-card" id="confirm-personal">
+      <div class="confirm-card-title">Personal</div>
+      <div class="confirm-row">
+        <span class="confirm-key">Name</span>
+        <span class="confirm-val" id="cf-name">—</span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-key">Age / Gender</span>
+        <span class="confirm-val" id="cf-age-gender">—</span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-key">Phone</span>
+        <span class="confirm-val" id="cf-phone">—</span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-key">Emergency contact</span>
+        <span class="confirm-val" id="cf-ec">—</span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-key">Language</span>
+        <span class="confirm-val" id="cf-lang">—</span>
+      </div>
+    </div>
+
+    <div class="confirm-card">
+      <div class="confirm-card-title">Medical</div>
+      <div class="confirm-row">
+        <span class="confirm-key">Blood group</span>
+        <span class="confirm-val blood" id="cf-blood">—</span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-key">Allergies</span>
+        <span class="confirm-val" id="cf-allergies">None</span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-key">Conditions</span>
+        <span class="confirm-val" id="cf-conditions">None</span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-key">Medications</span>
+        <span class="confirm-val" id="cf-medications">None</span>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="showStep(2)">← Back</button>
+      <button class="btn-finish" onclick="saveStep3()">✓ Finish & Enter App</button>
+    </div>
+  </div>
+
+</div><!-- end .content -->
+
+
+<script>
+// ════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════
+let selectedGender   = 'Male';
+let selectedBlood    = '';
+let selectedLanguage = 'en';
+let currentStep      = 1;
+
+const langNames = {
+  en: 'English', hi: 'Hindi', ta: 'Tamil',
+  te: 'Telugu',  bn: 'Bengali', kn: 'Kannada',
+  ml: 'Malayalam', mr: 'Marathi'
+};
+
+
+// ════════════════════════════════════════════
+// STEP NAVIGATION
+// ════════════════════════════════════════════
+function showStep(n) {
+  // Hide all steps
+  document.querySelectorAll('.step-section').forEach(s => s.classList.remove('visible'));
+  // Show target
+  document.getElementById('step-' + n).classList.add('visible');
+  currentStep = n;
+
+  // Update progress bar
+  for (let i = 1; i <= 3; i++) {
+    const seg = document.getElementById('seg-' + i);
+    const lbl = document.getElementById('lbl-' + i);
+    seg.className = 'progress-seg' + (i < n ? ' done' : i === n ? ' active' : '');
+    lbl.className = 'step-label'   + (i < n ? ' done' : i === n ? ' active' : '');
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  hideError('err-' + n);
+}
+
+function showError(id, msg) {
+  const el = document.getElementById(id);
+  if (msg) el.textContent = msg;
+  el.classList.add('visible');
+}
+function hideError(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.remove('visible');
+}
+
+
+// ════════════════════════════════════════════
+// SELECTORS
+// ════════════════════════════════════════════
+function selectGender(btn) {
+  document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedGender = btn.dataset.gender;
+}
+
+function selectBlood(btn) {
+  document.querySelectorAll('.blood-chip').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedBlood = btn.dataset.value;
+  hideError('err-2');
+}
+
+function selectLanguage(btn) {
+  document.querySelectorAll('.lang-chip').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedLanguage = btn.dataset.lang;
+}
+
+
+// ════════════════════════════════════════════
+// STEP 1 — SAVE + VALIDATE
+// ════════════════════════════════════════════
+function saveStep1() {
+  const name    = document.getElementById('input-name').value.trim();
+  const age     = document.getElementById('input-age').value.trim();
+  const phone   = document.getElementById('input-phone').value.trim();
+  const ecName  = document.getElementById('input-ec-name').value.trim();
+  const ecRel   = document.getElementById('input-ec-rel').value.trim();
+  const ecPhone = document.getElementById('input-ec-phone').value.trim();
+
+  if (!name || !age || !phone || !ecName || !ecRel || !ecPhone) {
+    showError('err-1', 'Please fill in all required fields marked with *');
+    return;
+  }
+  if (isNaN(age) || age < 1 || age > 120) {
+    showError('err-1', 'Please enter a valid age between 1 and 120.');
+    return;
+  }
+
+  const address = document.getElementById('input-address').value.trim();
+
+  // Save to localStorage
+  localStorage.setItem('sr_name',      name);
+  localStorage.setItem('sr_age',       age);
+  localStorage.setItem('sr_gender',    selectedGender);
+  localStorage.setItem('sr_phone',     phone);
+  localStorage.setItem('sr_address',   address);
+  localStorage.setItem('sr_ec_name',   ecName);
+  localStorage.setItem('sr_ec_rel',    ecRel);
+  localStorage.setItem('sr_ec_phone',  ecPhone);
+  localStorage.setItem('sr_language',  selectedLanguage);
+
+  showStep(2);
+}
+
+
+// ════════════════════════════════════════════
+// STEP 2 — SAVE + VALIDATE
+// ════════════════════════════════════════════
+function saveStep2() {
+  if (!selectedBlood) {
+    showError('err-2', 'Please select your blood group.');
+    return;
+  }
+
+  const allergies   = document.getElementById('input-allergies').value.trim();
+  const conditions  = document.getElementById('input-conditions').value.trim();
+  const medications = document.getElementById('input-medications').value.trim();
+  const surgeries   = document.getElementById('input-surgeries').value.trim();
+
+  localStorage.setItem('sr_blood',       selectedBlood);
+  localStorage.setItem('sr_allergies',   allergies   || 'None');
+  localStorage.setItem('sr_conditions',  conditions  || 'None');
+  localStorage.setItem('sr_medications', medications || 'None');
+  localStorage.setItem('sr_surgeries',   surgeries   || 'None');
+
+  // Populate confirmation card in step 3
+  populateConfirm();
+  showStep(3);
+}
+
+
+// ════════════════════════════════════════════
+// STEP 3 — POPULATE CONFIRM + FINISH
+// ════════════════════════════════════════════
+function populateConfirm() {
+  document.getElementById('cf-name').textContent =
+    localStorage.getItem('sr_name') || '—';
+  document.getElementById('cf-age-gender').textContent =
+    (localStorage.getItem('sr_age') || '—') + ' yrs · ' +
+    (localStorage.getItem('sr_gender') || '—');
+  document.getElementById('cf-phone').textContent =
+    localStorage.getItem('sr_phone') || '—';
+  document.getElementById('cf-ec').textContent =
+    (localStorage.getItem('sr_ec_name') || '—') +
+    ' (' + (localStorage.getItem('sr_ec_rel') || '—') + ')';
+  document.getElementById('cf-lang').textContent =
+    langNames[localStorage.getItem('sr_language')] || 'English';
+  document.getElementById('cf-blood').textContent =
+    localStorage.getItem('sr_blood') || '—';
+  document.getElementById('cf-allergies').textContent =
+    localStorage.getItem('sr_allergies') || 'None';
+  document.getElementById('cf-conditions').textContent =
+    localStorage.getItem('sr_conditions') || 'None';
+  document.getElementById('cf-medications').textContent =
+    localStorage.getItem('sr_medications') || 'None';
+}
+
+function saveStep3() {
+  const insurance = document.getElementById('input-insurance').value.trim();
+  const policy    = document.getElementById('input-policy').value.trim();
+
+  localStorage.setItem('sr_insurance', insurance || 'Not provided');
+  localStorage.setItem('sr_policy',    policy    || 'Not provided');
+  localStorage.setItem('sr_signup_done', 'true');
+
+  // Go to home screen
+  // Change 'home.html' to your actual home screen file name
+  window.location.href = 'home.html';
+}
+
+
+// ════════════════════════════════════════════
+// ON PAGE LOAD
+// ════════════════════════════════════════════
+window.addEventListener('load', () => {
+  // If already signed up, go straight to home
+  if (localStorage.getItem('sr_signup_done') === 'true') {
+    window.location.href = 'home.html';
+    return;
+  }
+  showStep(1);
+});
+</script>
+<script src="js/signup.js"></script>
+<script src="../js/language.js"></script>
+</body>
+</html>
