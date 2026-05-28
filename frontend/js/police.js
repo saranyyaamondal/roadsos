@@ -1,7 +1,7 @@
 // ─── police.js ────────────────────────────────────────────────
 import { initMap, addDestinationMarker, fitMapBounds } from './map.js';
 
-const BACKEND_URL = window.BACKEND_URL ?? 'http://localhost:3000';
+const BACKEND_URL = window.BACKEND_URL ?? 'https://suraksharoad.onrender.com';
 const ORS_API_KEY = window.ORS_API_KEY ?? '';
 
 // ─── GPS ──────────────────────────────────────────────────────
