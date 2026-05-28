@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SurakshaRoad — Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{--red:#C62828;--red-light:#FFEBEE;--red-dark:#8B0000;--green:#2E7D32;--green-light:#E8F5E9;--blue:#1565C0;--blue-light:#E3F2FD;--orange:#E65100;--bg:#F7F7F7;--card:#fff;--text:#1A1A1A;--muted:#757575;--border:#E0E0E0;--radius:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh;padding-bottom:2rem}
+
+/* HEADER */
+.header{background:var(--red);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(198,40,40,0.3)}
+.logo-icon{width:36px;height:36px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-size:18px;color:var(--red);font-weight:800}
+.logo-name{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800}
+.logo-sub{font-size:10px;opacity:.8}
+.lang-badge{margin-left:auto;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:.2rem .7rem;font-size:.75rem;font-weight:700}
+
+/* CONTENT */
+.content{max-width:500px;margin:0 auto;padding:16px}
+
+/* LOCATION BANNER */
+.loc-banner{background:var(--green-light);border:1.5px solid #A5D6A7;border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--green);margin-bottom:14px}
+.loc-dot{width:9px;height:9px;border-radius:50%;background:var(--green);animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* GPS STATUS */
+.gps-status{font-size:12px;color:var(--muted);margin-bottom:4px;min-height:18px}
+
+/* ROLE TOGGLE */
+.role-row{display:flex;gap:8px;margin-bottom:14px}
+.role-btn{flex:1;padding:11px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;text-align:center}
+.role-btn.active{background:var(--red);color:#fff;border-color:var(--red)}
+#bystanderBtn.active{background:var(--blue);border-color:var(--blue)}
+
+/* BYSTANDER NOTE */
+.bystander-note{background:var(--blue-light);border:1.5px solid #90CAF9;border-radius:10px;padding:10px 14px;font-size:12px;color:var(--blue);font-weight:600;margin-bottom:14px;display:none}
+.bystander-note.visible{display:block}
+
+/* SERVICE GRID */
+.service-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.svc-card{background:var(--card);border-radius:var(--radius);padding:16px 12px;text-align:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.07);border:1.5px solid var(--border);transition:transform .15s,box-shadow .15s}
+.svc-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.12)}
+.svc-card:active{transform:scale(0.97)}
+.svc-icon{font-size:2rem;margin-bottom:6px}
+.svc-name{font-weight:800;font-size:14px;color:var(--text)}
+.svc-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.svc-ambulance{background:#FFF3F3;border-color:#FFCDD2}
+.svc-police{background:#E8EAF6;border-color:#C5CAE9}
+.svc-hospital{background:#E8F5E9;border-color:#C8E6C9}
+.svc-emergency{background:#FCE4EC;border-color:#F8BBD0}
+
+/* MEDICAL CARD STRIP */
+.mc-strip{background:var(--card);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.07);margin-bottom:10px;border:1.5px solid var(--border)}
+.mc-avatar{width:42px;height:42px;background:var(--red-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-weight:800;font-size:14px;color:var(--red);flex-shrink:0}
+.mc-info{flex:1}
+.mc-name{font-weight:800;font-size:14px}
+.mc-badges{display:flex;gap:10px;margin-top:4px}
+.mc-badge{font-size:11px}
+.mc-badge b{display:block;font-size:10px;color:var(--muted);font-weight:600}
+.val-blood{color:var(--red);font-weight:800}
+.val-allergy{color:var(--orange);font-weight:700}
+.val-cond{color:var(--blue);font-weight:700}
+.mc-link{background:var(--green-light);color:var(--green);border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;text-decoration:none}
+
+/* SIGNAL BANNER */
+.signal-banner{background:#FFF8E1;border:1.5px solid #FFE082;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700;color:#E65100;display:flex;align-items:center;gap:6px;margin-bottom:10px}
+
+/* MANUAL GPS */
+.gps-manual{display:none;background:var(--card);border-radius:10px;padding:14px;border:1.5px solid var(--border);margin-bottom:14px}
+.gps-manual.visible{display:block}
+.gps-manual input{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;margin:4px 0 8px;font-family:'Nunito',sans-serif}
+.gps-manual button{width:100%;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-icon">+</div>
+  <div>
+    <div class="logo-name">SurakshaRoad</div>
+    <div class="logo-sub">Emergency Road Safety</div>
+  </div>
+  <span class="lang-badge" id="lang-badge">EN</span>
+</div>
+
+<div class="content">
+
+  <div class="loc-banner">
+    <span class="loc-dot"></span>
+    <span id="loc-text">Detecting location…</span>
+  </div>
+
+  <div class="gps-status" id="status">Fetching GPS…</div>
+
+  <!-- ROLE TOGGLE -->
+  <div class="role-row">
+    <button class="role-btn active" id="victimBtn">I am the Victim</button>
+    <button class="role-btn"        id="bystanderBtn">I am a Bystander</button>
+  </div>
+
+  <div class="bystander-note" id="bystander-note">
+    🔵 As a bystander you must <strong>verify with a photo</strong> before any alert fires. Your identity stays anonymous — only GPS location is shared.
+  </div>
+
+  <!-- SERVICE CARDS -->
+  <div class="service-grid">
+    <button class="svc-card svc-ambulance emergencyBtn" data-dest="emergency.html">
+      <div class="svc-icon">🚑</div>
+      <div class="svc-name">Ambulance</div>
+      <div class="svc-sub">Direct call</div>
+    </button>
+    <button class="svc-card svc-police emergencyBtn" data-dest="police.html">
+      <div class="svc-icon">👮</div>
+      <div class="svc-name">Police</div>
+      <div class="svc-sub">Stations nearby</div>
+    </button>
+    <button class="svc-card svc-hospital emergencyBtn" data-dest="hospitals.html">
+      <div class="svc-icon">🏥</div>
+      <div class="svc-name">Hospital</div>
+      <div class="svc-sub">AI-ranked nearby</div>
+    </button>
+    <button class="svc-card svc-emergency emergencyBtn" data-dest="emergency.html">
+      <div class="svc-icon">🆘</div>
+      <div class="svc-name">Emergency</div>
+      <div class="svc-sub">All services</div>
+    </button>
+  </div>
+
+  <!-- MEDICAL CARD STRIP -->
+  <div class="mc-strip">
+    <div class="mc-avatar" id="mc-initials">?</div>
+    <div class="mc-info">
+      <div class="mc-name" id="user-name">Loading…</div>
+      <div class="mc-badges">
+        <div class="mc-badge"><b>Blood</b><span class="val-blood" id="user-blood">—</span></div>
+        <div class="mc-badge"><b>Allergy</b><span class="val-allergy" id="user-allergy">—</span></div>
+        <div class="mc-badge"><b>Condition</b><span class="val-cond" id="user-condition">—</span></div>
+      </div>
+    </div>
+    <a href="medical-card.html" class="mc-link">Medical card</a>
+  </div>
+
+  <div class="signal-banner" id="signal-banner" style="display:none">
+    📶 Low signal — using cached data
+  </div>
+
+  <!-- MANUAL GPS INPUT (shown if GPS denied) -->
+  <div class="gps-manual" id="gpsManualInput">
+    <div style="font-size:13px;font-weight:700;margin-bottom:6px">📍 Enter location manually</div>
+    <input id="manualLat" type="number" placeholder="Latitude (e.g. 12.9250)" step="any"/>
+    <input id="manualLon" type="number" placeholder="Longitude (e.g. 80.1300)" step="any"/>
+    <button id="saveLocationBtn">Save Location</button>
+  </div>
+
+</div>
+
+<script type="module" src="js/main.js"></script>
+
+<script>
+// Inline: populate medical card strip from localStorage on load
+window.addEventListener('load', () => {
+  const name  = localStorage.getItem('sr_name')       || 'User';
+  const blood = localStorage.getItem('sr_blood')      || '—';
+  const allergy= localStorage.getItem('sr_allergies') || 'None';
+  const cond  = localStorage.getItem('sr_conditions') || 'None';
+  const lang  = localStorage.getItem('sr_language')   || 'en';
+
+  document.getElementById('user-name').textContent      = name;
+  document.getElementById('user-blood').textContent     = blood;
+  document.getElementById('user-allergy').textContent   = allergy.length > 10 ? allergy.substring(0,10)+'…' : allergy;
+  document.getElementById('user-condition').textContent = cond.length > 10 ? cond.substring(0,10)+'…' : cond;
+  document.getElementById('mc-initials').textContent    = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('lang-badge').textContent     = lang.toUpperCase();
+
+  // Update role buttons to reflect saved role
+  const role = localStorage.getItem('role') || 'victim';
+  if (role === 'bystander') {
+    document.getElementById('bystanderBtn').classList.add('active');
+    document.getElementById('victimBtn').classList.remove('active');
+    document.getElementById('bystander-note').classList.add('visible');
+  }
+
+  // Location text
+  const lat = localStorage.getItem('lat');
+  const lon = localStorage.getItem('lon');
+  if (lat && lon) {
+    document.getElementById('loc-text').textContent = `GPS: ${parseFloat(lat).toFixed(4)}, ${parseFloat(lon).toFixed(4)}`;
+  }
+
+  // Toggle bystander note on role button clicks
+  document.getElementById('bystanderBtn').addEventListener('click', () => {
+    document.getElementById('bystander-note').classList.add('visible');
+  });
+  document.getElementById('victimBtn').addEventListener('click', () => {
+    document.getElementById('bystander-note').classList.remove('visible');
+  });
+});
+</script>
+</body>
+</html>

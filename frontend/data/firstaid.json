@@ -1,0 +1,58 @@
+{
+  "bleeding": [
+    {"title":"Stay calm and call for help immediately","detail":""},
+    {"title":"Apply firm pressure on the wound using a cloth or clothing","detail":"Do not remove the cloth if it soaks through — add more on top"},
+    {"title":"Elevate the injured limb above heart level if possible","detail":""},
+    {"title":"Keep the person warm and still","detail":"Do not offer food or water"},
+    {"title":"Monitor breathing until ambulance arrives","detail":""}
+  ],
+  "fracture": [
+    {"title":"Do not try to straighten the bone","detail":"Moving it causes more damage to nerves and blood vessels"},
+    {"title":"Immobilise the area using splints or rolled clothing","detail":"Pad the splint with cloth to reduce pressure"},
+    {"title":"Apply an ice pack wrapped in cloth to reduce swelling","detail":"Never apply ice directly to skin"},
+    {"title":"Keep the person still and comfortable","detail":"Do not offer food or water in case surgery is needed"}
+  ],
+  "unconscious": [
+    {"title":"Check if the person is breathing — look, listen, feel","detail":"Tilt head back slightly and look for chest rise"},
+    {"title":"Place in recovery position if breathing","detail":"This prevents choking if they vomit"},
+    {"title":"Begin CPR if not breathing — 30 compressions, 2 rescue breaths","detail":"Push hard and fast at 100–120 compressions per minute"},
+    {"title":"Do not give water or food; keep them warm","detail":""}
+  ],
+  "burns": [
+    {"title":"Remove the person from the source of heat immediately","detail":""},
+    {"title":"Cool the burn with cool (not cold) running water for 10–20 minutes","detail":"Never use ice, butter, or toothpaste on burns"},
+    {"title":"Remove jewellery or tight clothing near the burn","detail":"Do this before swelling starts"},
+    {"title":"Cover loosely with a clean non-fluffy material","detail":"Use cling film or a clean plastic bag if available"},
+    {"title":"Do not burst any blisters","detail":"This increases risk of infection"},
+    {"title":"Call emergency services for large or deep burns","detail":""}
+  ],
+  "choking": [
+    {"title":"Ask the person if they can speak or cough","detail":"If they can, encourage them to keep coughing"},
+    {"title":"Give up to 5 firm back blows between the shoulder blades","detail":"Use the heel of your hand"},
+    {"title":"Give up to 5 abdominal thrusts (Heimlich manoeuvre)","detail":"Stand behind them, make a fist above the navel, pull sharply inward and upward"},
+    {"title":"Alternate between 5 back blows and 5 abdominal thrusts","detail":"Stop if the object is expelled"},
+    {"title":"Call emergency services if the obstruction does not clear","detail":""}
+  ],
+  "heart_attack": [
+    {"title":"Call emergency services (112) immediately","detail":""},
+    {"title":"Have the person sit or lie down in a comfortable position","detail":"Loosen any tight clothing"},
+    {"title":"If they are conscious and not allergic, give aspirin to chew","detail":"325mg if available — do not swallow whole"},
+    {"title":"Monitor breathing and pulse constantly","detail":""},
+    {"title":"Begin CPR if they become unconscious and stop breathing","detail":"30 compressions followed by 2 rescue breaths"}
+  ],
+  "seizure": [
+    {"title":"Stay calm and time the seizure","detail":""},
+    {"title":"Clear the area of hard or sharp objects","detail":"Do not restrain the person"},
+    {"title":"Place something soft under their head","detail":""},
+    {"title":"Turn them gently on their side after convulsions stop","detail":"This is the recovery position"},
+    {"title":"Do not put anything in their mouth","detail":"People cannot swallow their tongue"},
+    {"title":"Call emergency services if seizure lasts more than 5 minutes","detail":""}
+  ],
+  "drowning": [
+    {"title":"Remove the person from water safely — do not put yourself at risk","detail":"Use a rope, branch or flotation device if possible"},
+    {"title":"Call emergency services immediately","detail":""},
+    {"title":"Check for breathing — tilt head back and lift chin","detail":""},
+    {"title":"Give 5 rescue breaths if not breathing","detail":""},
+    {"title":"Begin CPR — 30 compressions, 2 breaths","detail":"Continue until help arrives or person recovers"}
+  ]
+}

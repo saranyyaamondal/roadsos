@@ -1,0 +1,62 @@
+{
+  "hi": {
+    "emergency": "आपातकाल",
+    "hospital": "अस्पताल",
+    "police": "पुलिस",
+    "ambulance": "एम्बुलेंस",
+    "i_am_victim": "मैं पीड़ित हूँ",
+    "i_am_bystander": "मैं राहगीर हूँ",
+    "first_aid": "प्राथमिक चिकित्सा",
+    "medical_card": "मेडिकल कार्ड",
+    "get_started": "शुरू करें",
+    "finish": "समाप्त करें"
+  },
+  "ta": {
+    "emergency": "அவசரநிலை",
+    "hospital": "மருத்துவமனை",
+    "police": "காவல்துறை",
+    "ambulance": "ஆம்புலன்ஸ்",
+    "i_am_victim": "நான் பாதிக்கப்பட்டவன்",
+    "i_am_bystander": "நான் பார்வையாளன்",
+    "first_aid": "முதலுதவி",
+    "medical_card": "மருத்துவ அட்டை",
+    "get_started": "தொடங்கு",
+    "finish": "முடிக்கவும்"
+  },
+  "te": {
+    "emergency": "అత్యవసర పరిస్థితి",
+    "hospital": "ఆసుపత్రి",
+    "police": "పోలీసు",
+    "ambulance": "యాంబులెన్స్",
+    "i_am_victim": "నేను బాధితుడిని",
+    "i_am_bystander": "నేను పక్కన ఉన్నవాడిని",
+    "first_aid": "ప్రథమ చికిత్స",
+    "medical_card": "వైద్య కార్డు",
+    "get_started": "ప్రారంభించండి",
+    "finish": "పూర్తి చేయి"
+  },
+  "bn": {
+    "emergency": "জরুরী অবস্থা",
+    "hospital": "হাসপাতাল",
+    "police": "পুলিশ",
+    "ambulance": "অ্যাম্বুলেন্স",
+    "i_am_victim": "আমি ভুক্তভোগী",
+    "i_am_bystander": "আমি পথচারী",
+    "first_aid": "প্রাথমিক চিকিৎসা",
+    "medical_card": "মেডিকেল কার্ড",
+    "get_started": "শুরু করুন",
+    "finish": "শেষ করুন"
+  },
+  "kn": {
+    "emergency": "ತುರ್ತು ಪರಿಸ್ಥಿತಿ",
+    "hospital": "ಆಸ್ಪತ್ರೆ",
+    "police": "ಪೊಲೀಸ್",
+    "ambulance": "ಆಂಬುಲೆನ್ಸ್",
+    "i_am_victim": "ನಾನು ಬಾಧಿತ",
+    "i_am_bystander": "ನಾನು ಪ್ರೇಕ್ಷಕ",
+    "first_aid": "ಪ್ರಥಮ ಚಿಕಿತ್ಸೆ",
+    "medical_card": "ವೈದ್ಯಕೀಯ ಕಾರ್ಡ್",
+    "get_started": "ಪ್ರಾರಂಭಿಸಿ",
+    "finish": "ಮುಗಿಸಿ"
+  }
+}

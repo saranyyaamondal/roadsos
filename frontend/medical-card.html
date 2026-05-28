@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SurakshaRoad — Medical Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root{--red:#C62828;--red-light:#FFEBEE;--green:#2E7D32;--green-light:#E8F5E9;--bg:#F7F7F7;--card:#fff;--text:#1A1A1A;--muted:#757575;--border:#E0E0E0;--radius:14px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh}
+  header{background:var(--red);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+  header h1{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800}
+  .back-btn{background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:14px}
+  .content{max-width:500px;margin:0 auto;padding:16px}
+  .offline-badge{background:var(--green-light);color:var(--green);border-radius:6px;padding:6px 12px;font-size:12px;font-weight:700;text-align:center;margin-bottom:14px}
+  .card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:14px}
+  .mc-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .mc-avatar{width:52px;height:52px;background:var(--red-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-weight:800;font-size:16px;color:var(--red);flex-shrink:0}
+  .mc-name{font-weight:800;font-size:16px}
+  .mc-detail{font-size:12px;color:var(--muted);margin-top:2px}
+  .mc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+  .mc-field label{font-size:11px;color:var(--muted);font-weight:700;display:block;margin-bottom:3px}
+  .mc-val{font-size:15px;font-weight:800}
+  .mc-val.blood{color:var(--red)}
+  .mc-field p{font-size:13px;font-weight:700}
+  .mc-full{margin-bottom:10px}
+  .mc-full label{font-size:11px;color:var(--muted);font-weight:700;display:block;margin-bottom:3px}
+  .mc-full p{font-size:13px;font-weight:700}
+  .btn-whatsapp{display:block;width:100%;padding:14px;background:#25D366;color:#fff;border:none;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;text-align:center;box-shadow:0 4px 14px rgba(37,211,102,.35);margin-top:4px}
+  .btn-whatsapp:hover{background:#1ebe57}
+</style>
+</head>
+<body>
+<header>
+  <button class="back-btn" onclick="history.back()">← Back</button>
+  <h1>My Medical Card</h1>
+</header>
+<div class="content">
+  <div class="offline-badge">✅ Works offline — no login needed</div>
+  <div class="card" id="screen-medcard">
+    <div class="mc-header">
+      <div class="mc-avatar" id="mc-avatar">?</div>
+      <div>
+        <div class="mc-name" id="mc-name">Loading…</div>
+        <div class="mc-detail" id="mc-detail"></div>
+      </div>
+    </div>
+    <div class="mc-grid">
+      <div class="mc-field">
+        <label>Blood group</label>
+        <div class="mc-val blood" id="mc-blood">—</div>
+      </div>
+      <div class="mc-field">
+        <label>Allergies</label>
+        <p id="mc-allergy">—</p>
+      </div>
+      <div class="mc-field">
+        <label>Condition</label>
+        <p id="mc-condition">—</p>
+      </div>
+      <div class="mc-field">
+        <label>Medication</label>
+        <p id="mc-medication">—</p>
+      </div>
+    </div>
+    <div class="mc-full">
+      <label>Emergency contact</label>
+      <p id="mc-ec">—</p>
+    </div>
+    <div class="mc-full">
+      <label>Insurance</label>
+      <p id="mc-insurance">—</p>
+    </div>
+  </div>
+  <button class="btn-whatsapp" onclick="shareViaWhatsApp()">
+    💬 Share medical card via WhatsApp
+  </button>
+</div>
+
+<script type="module">
+  import { CONFIG } from './js/config.js';
+  if (!CONFIG.requireAuth()) throw new Error('Not authenticated');
+</script>
+<script src="js/profile-bridge.js"></script>
+<script>
+  // Force re-bridge every time medical card opens
+localStorage.removeItem('surakshaProfile');
+bridgeProfileToM2Format(); // rebuild fresh from sr_* keys
+function loadProfile() {
+  try {
+    const raw = localStorage.getItem('surakshaProfile');
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
+function populate() {
+  const p = loadProfile();
+  if (!p) {
+    document.getElementById('mc-name').textContent = 'No profile found';
+    return;
+  }
+  const initials = (p.name||'').trim().split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('mc-avatar').textContent    = initials || '?';
+  document.getElementById('mc-name').textContent      = p.name       || 'Unknown';
+  document.getElementById('mc-detail').textContent    = [p.gender, p.age ? p.age+' yrs' : '', p.phone].filter(Boolean).join(' · ');
+  document.getElementById('mc-blood').textContent     = p.bloodGroup  || '—';
+  document.getElementById('mc-allergy').textContent   = p.allergy     || 'None';
+  document.getElementById('mc-condition').textContent = p.condition   || 'None';
+  document.getElementById('mc-medication').textContent= p.medication  || 'None';
+  document.getElementById('mc-ec').textContent        = (p.ecName||'Not set') + (p.ecRelation ? ' ('+p.ecRelation+')' : '') + (p.ecPhone ? ' · '+p.ecPhone : '');
+  document.getElementById('mc-insurance').textContent = (p.insurer||'Not provided') + (p.policyNo ? ' · '+p.policyNo : '');
+}
+
+function shareViaWhatsApp() {
+  const p = loadProfile();
+  const msg = p
+    ? `🚨 *MEDICAL CARD — SurakshaRoad*\n\n*Patient:* ${p.name||'Unknown'}\n*Blood:* ${p.bloodGroup||'—'}\n*Allergy:* ${p.allergy||'None'}\n*Condition:* ${p.condition||'None'}\n*Medication:* ${p.medication||'None'}\n*Emergency Contact:* ${p.ecName||'Not set'}${p.ecPhone?' — '+p.ecPhone:''}\n*Insurance:* ${p.insurer||'Not provided'}${p.policyNo?' / '+p.policyNo:''}`
+    : '🚨 *MEDICAL CARD — SurakshaRoad*\n\nNo profile saved yet.';
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+}
+
+window.addEventListener('load', populate);
+</script>
+
+</body>
+</html>

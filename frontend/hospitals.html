@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SurakshaRoad — Hospitals</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;color:#1a1a2e}
+header{background:linear-gradient(135deg,#C62828,#e74c3c);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+header h1{font-size:18px;font-weight:700;flex:1}
+.back{background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px}
+#ai-box{background:#fff8e1;border-left:4px solid #f39c12;margin:14px;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.6;color:#333}
+#ai-box .lbl{font-weight:700;color:#e67e22;font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+#map{height:200px;margin:0 14px;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+#status{text-align:center;padding:14px;font-size:13px;color:#666}
+.spin{display:inline-block;width:18px;height:18px;border:3px solid #ddd;border-top-color:#C62828;border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+#cards{padding:0 14px 24px}
+.sec-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#888;margin:14px 0 8px}
+.card{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px rgba(0,0,0,.07);border:1px solid #f0f0f0}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.card-name{font-size:15px;font-weight:700;color:#1a1a2e;flex:1}
+.dist{background:#fdecea;color:#C62828;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;margin-left:8px}
+.card-meta{font-size:12px;color:#666;margin-bottom:10px}
+.tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;margin-right:4px;margin-bottom:4px}
+.tag-trauma{background:#fdecea;color:#C62828}
+.tag-gov{background:#E3F2FD;color:#1565C0}
+.card-btns{display:flex;gap:8px}
+.btn{flex:1;padding:9px 12px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px}
+.btn-call{background:#27ae60;color:#fff}
+.btn-nav{background:#2980b9;color:#fff}
+.err{background:#fdecea;border:1px solid #e74c3c;border-radius:10px;padding:12px 14px;margin:0 14px;font-size:13px;color:#C62828}
+</style>
+</head>
+<body>
+<header>
+  <button class="back" onclick="history.back()">← Back</button>
+  <h1>🏥 Nearby Hospitals</h1>
+</header>
+
+<div id="ai-box">
+  <div class="lbl">🤖 AI Triage Reasoning</div>
+  <div id="ai-text">Analysing best hospitals for your location…</div>
+</div>
+
+<div id="map"></div>
+<div id="status"><span class="spin"></span>Getting your location…</div>
+<div id="cards">
+  <div class="sec-title">Hospitals Near You</div>
+  <div id="cards-list"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="module">
+import { CONFIG } from './js/config.js';
+CONFIG.requireAuth();
+
+const API = CONFIG.API_BASE;
+const statusEl = document.getElementById('status');
+const listEl   = document.getElementById('cards-list');
+
+// GPS from localStorage (set by gps.js on home page)
+function getCoords() {
+  const lat = parseFloat(localStorage.getItem('lat'));
+  const lon = parseFloat(localStorage.getItem('lon'));
+  if (lat && lon && !isNaN(lat) && !isNaN(lon)) {
+    return Promise.resolve({ lat, lon });
+  }
+  return new Promise((res, rej) => {
+    navigator.geolocation.getCurrentPosition(
+      p => {
+        localStorage.setItem('lat', p.coords.latitude);
+        localStorage.setItem('lon', p.coords.longitude);
+        res({ lat: p.coords.latitude, lon: p.coords.longitude });
+      },
+      () => rej(new Error('GPS unavailable')),
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  });
+}
+
+// Map
+let map;
+function initMap(lat, lon) {
+  map = L.map('map').setView([lat, lon], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    { attribution: '© OpenStreetMap' }).addTo(map);
+  L.circleMarker([lat, lon], { radius: 8, fillColor: '#C62828', color: '#fff', fillOpacity: 1, weight: 2 })
+    .addTo(map).bindPopup('📍 You');
+}
+function addPin(lat, lon, name, dist) {
+  L.circleMarker([lat, lon], { radius: 7, fillColor: '#2980b9', color: '#fff', fillOpacity: 1, weight: 2 })
+    .addTo(map).bindPopup(`<b>${name}</b><br>${dist} km`);
+}
+
+// Card
+function buildCard(h) {
+  const maps = `https://maps.google.com/?daddr=${h.lat},${h.lon}`;
+  const tag  = h.level
+    ? `<span class="tag ${h.level.includes('Trauma') ? 'tag-trauma' : 'tag-gov'}">${h.level}</span>`
+    : '';
+  return `<div class="card">
+    <div class="card-top">
+      <div class="card-name">${h.name}</div>
+      <span class="dist">${h.distance_km} km</span>
+    </div>
+    <div>${tag}</div>
+    <div class="card-meta">📞 ${h.phone || 'N/A'}</div>
+    <div class="card-btns">
+      ${h.phone ? `<a class="btn btn-call" href="tel:${h.phone}">📞 Call</a>` : ''}
+      <a class="btn btn-nav" href="${maps}" target="_blank">🗺️ Navigate</a>
+    </div>
+  </div>`;
+}
+
+// AI triage
+async function runTriage(hospitals, lang) {
+  try {
+    const r = await fetch(`${API}/api/triage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ hospitals, injury: 'general road accident', language: lang || 'en' })
+    });
+    const d = await r.json();
+    document.getElementById('ai-text').textContent = d.reason || 'No AI response.';
+  } catch {
+    document.getElementById('ai-text').textContent = 'AI triage unavailable.';
+  }
+}
+
+async function main() {
+  let coords;
+  try {
+    coords = await getCoords();
+  } catch {
+    statusEl.innerHTML = '';
+    listEl.innerHTML = '<div class="err">❌ Location unavailable. Please enable GPS and reload.</div>';
+    return;
+  }
+
+  const { lat, lon } = coords;
+  initMap(lat, lon);
+  statusEl.innerHTML = '<span class="spin"></span>Finding hospitals…';
+
+  let data;
+  try {
+    const r = await fetch(`${API}/api/nearby?lat=${lat}&lon=${lon}&type=hospital`);
+    data = await r.json();
+  } catch {
+    statusEl.innerHTML = '';
+    listEl.innerHTML = '<div class="err">❌ Server unreachable.</div>';
+    return;
+  }
+
+  statusEl.innerHTML = '';
+  const hospitals = data.results || [];
+
+  if (!hospitals.length) {
+    listEl.innerHTML = '<div class="err">No hospitals found within 10 km of your location.</div>';
+    document.getElementById('ai-text').textContent = 'No nearby hospitals found.';
+    return;
+  }
+
+  hospitals.forEach(h => addPin(h.lat, h.lon, h.name, h.distance_km));
+  listEl.innerHTML = hospitals.map(buildCard).join('');
+
+  const lang = localStorage.getItem('sr_language') || 'en';
+  runTriage(hospitals, lang);
+}
+
+main();
+</script>
+</body>
+</html>

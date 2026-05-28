@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SurakshaRoad — Emergency</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{--red:#C62828;--red-l:#FFEBEE;--green:#2E7D32;--green-l:#E8F5E9;--bg:#F7F7F7;--card:#fff;--border:#E0E0E0;--r:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh;padding-bottom:2rem}
+header{background:var(--red);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+header h1{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;flex:1}
+.back{background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px}
+.wrap{max-width:480px;margin:0 auto;padding:14px}
+/* SOS */
+.sos-block{background:var(--red);border-radius:var(--r);padding:20px;text-align:center;margin-bottom:14px;box-shadow:0 4px 20px rgba(198,40,40,.4)}
+.sos-badge{background:#fff;color:var(--red);font-family:'Baloo 2',cursive;font-weight:800;font-size:16px;padding:3px 12px;border-radius:6px;display:inline-block;margin-bottom:8px}
+.sos-block h2{color:#fff;font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;margin-bottom:4px}
+.sos-block p{color:rgba(255,255,255,.85);font-size:12px}
+.btn-sos{display:block;width:100%;margin-top:14px;padding:15px;background:#fff;color:var(--red);border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:transform .15s}
+.btn-sos:active{transform:scale(.97)}
+.btn-sos:disabled{opacity:.6;cursor:not-allowed}
+/* ACTION GRID */
+.a-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.a-btn{background:var(--card);border-radius:12px;padding:12px 6px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);cursor:pointer;border:1.5px solid var(--border);transition:all .2s}
+.a-btn:hover{border-color:var(--red);transform:translateY(-1px)}
+.a-btn.done{border-color:var(--green);background:var(--green-l)}
+.a-icon{font-size:1.5rem;margin-bottom:4px}
+.a-name{font-size:12px;font-weight:800;color:#1a1a2e}
+.a-sub{font-size:10px;color:#757575;margin-top:2px}
+/* STATUS */
+.sec-lbl{font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.8px;margin:14px 0 8px}
+.a-row{background:var(--card);border-radius:10px;padding:12px 14px;display:flex;align-items:center;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.a-info{flex:1}
+.a-info strong{font-size:13px;font-weight:800}
+.a-info p{font-size:11px;color:#757575;margin-top:2px}
+.badge{padding:3px 10px;border-radius:999px;font-size:11px;font-weight:800}
+.b-pending{background:#F5F5F5;color:#757575}
+.b-sent{background:var(--green-l);color:var(--green)}
+.b-live{background:var(--red-l);color:var(--red);animation:bl 1.4s infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.4}}
+/* LIVE BOX */
+.live-box{background:var(--red-l);border:1.5px solid #FFCDD2;border-radius:10px;padding:12px 14px;margin-bottom:8px;display:none}
+.live-box.on{display:block}
+.live-box a{color:var(--red);font-weight:700;font-size:13px}
+.live-timer{font-size:11px;color:#757575;margin-top:4px}
+</style>
+</head>
+<body>
+<header>
+  <button class="back" onclick="history.back()">← Back</button>
+  <h1>🆘 Emergency</h1>
+</header>
+<div class="wrap">
+
+  <div class="sos-block">
+    <div class="sos-badge">SOS</div>
+    <h2>Call 112 + Ambulance</h2>
+    <p>Triggers call, WhatsApp alert and live location simultaneously</p>
+    <button class="btn-sos" id="sos-btn" onclick="triggerSOS()">
+      🚨 TAP TO TRIGGER EMERGENCY
+    </button>
+  </div>
+
+  <div class="a-grid">
+    <div class="a-btn" id="ab-wa"  onclick="sendWhatsApp()">
+      <div class="a-icon">💬</div><div class="a-name">WhatsApp</div><div class="a-sub">Alert contacts</div>
+    </div>
+    <div class="a-btn" id="ab-loc" onclick="shareLiveLocation()">
+      <div class="a-icon">📍</div><div class="a-name">Live location</div><div class="a-sub">30 min share</div>
+    </div>
+    <div class="a-btn" onclick="window.location.href='medical-card.html'">
+      <div class="a-icon">📋</div><div class="a-name">Medical card</div><div class="a-sub">View &amp; share</div>
+    </div>
+  </div>
+
+  <div class="live-box" id="live-box">
+    <strong>📍 Live location active</strong><br>
+    <a id="live-link" href="#" target="_blank">Open in Google Maps ↗</a>
+    <div class="live-timer" id="live-timer">Expires in 30:00</div>
+  </div>
+
+  <div class="sec-lbl">Alert Status</div>
+
+  <div class="a-row">
+    <div class="a-info"><strong>Ambulance 108</strong><p id="t-amb">Waiting…</p></div>
+    <span class="badge b-pending" id="s-amb">Pending</span>
+  </div>
+  <div class="a-row">
+    <div class="a-info"><strong id="ec-lbl">Emergency Contact</strong><p id="t-wa">Waiting…</p></div>
+    <span class="badge b-pending" id="s-wa">Pending</span>
+  </div>
+  <div class="a-row">
+    <div class="a-info"><strong>Live location</strong><p id="t-loc">Not started</p></div>
+    <span class="badge b-pending" id="s-loc">Pending</span>
+  </div>
+  <div class="a-row">
+    <div class="a-info"><strong>Call 112</strong><p id="t-call">Not dialled</p></div>
+    <span class="badge b-pending" id="s-call">Pending</span>
+  </div>
+
+</div>
+
+<script>
+// Read profile
+const name    = localStorage.getItem('sr_name')       || 'Unknown';
+const blood   = localStorage.getItem('sr_blood')      || '—';
+const allergy = localStorage.getItem('sr_allergies')  || 'None';
+const cond    = localStorage.getItem('sr_conditions') || 'None';
+const ecName  = localStorage.getItem('sr_ec_name')    || 'Emergency Contact';
+const ecPhone = localStorage.getItem('sr_ec_phone')   || '';
+const lat     = parseFloat(localStorage.getItem('lat')) || null;
+const lon     = parseFloat(localStorage.getItem('lon')) || null;
+
+document.getElementById('ec-lbl').textContent = ecName;
+
+function setStatus(id, label, cls, text) {
+  const b = document.getElementById('s-' + id);
+  const t = document.getElementById('t-' + id);
+  if (b) { b.textContent = label; b.className = 'badge ' + cls; }
+  if (t) t.textContent = text;
+}
+
+async function triggerSOS() {
+  const btn = document.getElementById('sos-btn');
+  btn.disabled    = true;
+  btn.textContent = '🔄 Triggering…';
+  triggerCall();
+  sendWhatsApp();
+  shareLiveLocation();
+  btn.textContent = '✅ Emergency Triggered';
+}
+
+function triggerCall() {
+  window.location.href = 'tel:112';
+  setStatus('call', 'Dialling', 'b-sent', 'Calling 112');
+  document.getElementById('ab-wa')?.classList.add('done');
+}
+
+function sendWhatsApp() {
+  const maps = lat && lon ? `https://maps.google.com/?q=${lat},${lon}` : 'Location unavailable';
+  const msg  =
+    `🚨 *EMERGENCY — SurakshaRoad*\n\n` +
+    `*${name}* has been in a road accident.\n\n` +
+    `📍 *Location:* ${maps}\n` +
+    `🩸 *Blood:* ${blood}\n` +
+    `⚠️ *Allergy:* ${allergy}\n` +
+    `🏥 *Condition:* ${cond}\n\n` +
+    `Please call emergency services immediately.`;
+
+  const num = ecPhone.replace(/\s/g,'').replace('+','');
+  const url = num
+    ? `https://wa.me/${num}?text=${encodeURIComponent(msg)}`
+    : `https://wa.me/?text=${encodeURIComponent(msg)}`;
+
+  window.open(url, '_blank');
+  setStatus('wa', 'Sent', 'b-sent', `WhatsApp sent to ${ecName}`);
+  setStatus('amb', 'Sent', 'b-sent', 'SMS with GPS sent');
+  document.getElementById('ab-wa')?.classList.add('done');
+}
+
+function shareLiveLocation() {
+  if (!lat || !lon) {
+    setStatus('loc', 'No GPS', 'b-pending', 'GPS not available');
+    return;
+  }
+  const url = `https://maps.google.com/?q=${lat},${lon}`;
+  const box = document.getElementById('live-box');
+  const lnk = document.getElementById('live-link');
+  if (box) box.classList.add('on');
+  if (lnk) lnk.href = url;
+
+  setStatus('loc', 'Live', 'b-live', 'Active for 30 minutes');
+  document.getElementById('ab-loc')?.classList.add('done');
+
+  let secs = 30 * 60;
+  const iv = setInterval(() => {
+    secs--;
+    const m = Math.floor(secs/60).toString().padStart(2,'0');
+    const s = (secs%60).toString().padStart(2,'0');
+    const el = document.getElementById('live-timer');
+    if (el) el.textContent = `Expires in ${m}:${s}`;
+    if (secs <= 0) {
+      clearInterval(iv);
+      setStatus('loc', 'Expired', 'b-pending', 'Live location expired');
+      if (box) box.classList.remove('on');
+    }
+  }, 1000);
+}
+</script>
+
+<script type="module">
+  import { CONFIG } from './js/config.js';
+  CONFIG.requireAuth();
+</script>
+</body>
+</html>

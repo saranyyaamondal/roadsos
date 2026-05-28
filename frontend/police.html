@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SurakshaRoad — Police</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;color:#1a1a2e}
+header{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+header h1{font-size:18px;font-weight:700;flex:1}
+.back{background:rgba(255,255,255,.15);border:none;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px}
+#map{height:200px;margin:14px;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+#status{text-align:center;padding:14px;font-size:13px;color:#666}
+.spin{display:inline-block;width:18px;height:18px;border:3px solid #ddd;border-top-color:#1a1a2e;border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+#cards{padding:0 14px 24px}
+.sec-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#888;margin:6px 0 8px}
+.card{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px rgba(0,0,0,.07);border:1px solid #f0f0f0}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.card-name{font-size:15px;font-weight:700;color:#1a1a2e;flex:1}
+.dist{background:#eaf0fb;color:#1a3a6e;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;margin-left:8px}
+.card-meta{font-size:12px;color:#666;margin-bottom:10px}
+.card-btns{display:flex;gap:8px}
+.btn{flex:1;padding:9px 12px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px}
+.btn-call{background:#1a1a2e;color:#fff}
+.btn-nav{background:#2980b9;color:#fff}
+.err{background:#fdecea;border:1px solid #e74c3c;border-radius:10px;padding:12px 14px;margin:0 14px;font-size:13px;color:#C62828}
+</style>
+</head>
+<body>
+<header>
+  <button class="back" onclick="history.back()">← Back</button>
+  <h1>🚔 Nearby Police Stations</h1>
+</header>
+<div id="map"></div>
+<div id="status"><span class="spin"></span>Getting your location…</div>
+<div id="cards">
+  <div class="sec-title">Police Stations Near You</div>
+  <div id="cards-list"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="module">
+import { CONFIG } from './js/config.js';
+CONFIG.requireAuth();
+
+const API = CONFIG.API_BASE;
+const statusEl = document.getElementById('status');
+const listEl   = document.getElementById('cards-list');
+
+function getCoords() {
+  const lat = parseFloat(localStorage.getItem('lat'));
+  const lon = parseFloat(localStorage.getItem('lon'));
+  if (lat && lon && !isNaN(lat) && !isNaN(lon)) return Promise.resolve({ lat, lon });
+  return new Promise((res, rej) => {
+    navigator.geolocation.getCurrentPosition(
+      p => {
+        localStorage.setItem('lat', p.coords.latitude);
+        localStorage.setItem('lon', p.coords.longitude);
+        res({ lat: p.coords.latitude, lon: p.coords.longitude });
+      },
+      () => rej(new Error('GPS unavailable')),
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  });
+}
+
+let map;
+function initMap(lat, lon) {
+  map = L.map('map').setView([lat, lon], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    { attribution: '© OpenStreetMap' }).addTo(map);
+  L.circleMarker([lat, lon], { radius: 8, fillColor: '#1a1a2e', color: '#fff', fillOpacity: 1, weight: 2 })
+    .addTo(map).bindPopup('📍 You');
+}
+function addPin(lat, lon, name, dist) {
+  L.circleMarker([lat, lon], { radius: 7, fillColor: '#2c3e8c', color: '#fff', fillOpacity: 1, weight: 2 })
+    .addTo(map).bindPopup(`<b>${name}</b><br>${dist} km`);
+}
+
+function buildCard(p) {
+  const maps = `https://maps.google.com/?daddr=${p.lat},${p.lon}`;
+  return `<div class="card">
+    <div class="card-top">
+      <div class="card-name">${p.name}</div>
+      <span class="dist">${p.distance_km} km</span>
+    </div>
+    <div class="card-meta">📞 ${p.phone || 'N/A'}</div>
+    <div class="card-btns">
+      ${p.phone ? `<a class="btn btn-call" href="tel:${p.phone}">📞 Call</a>` : ''}
+      <a class="btn btn-nav" href="${maps}" target="_blank">🗺️ Navigate</a>
+    </div>
+  </div>`;
+}
+
+async function main() {
+  let coords;
+  try { coords = await getCoords(); }
+  catch {
+    statusEl.innerHTML = '';
+    listEl.innerHTML = '<div class="err">❌ Location unavailable. Please enable GPS and reload.</div>';
+    return;
+  }
+
+  const { lat, lon } = coords;
+  initMap(lat, lon);
+  statusEl.innerHTML = '<span class="spin"></span>Finding police stations…';
+
+  let data;
+  try {
+    const r = await fetch(`${API}/api/nearby?lat=${lat}&lon=${lon}&type=police`);
+    data = await r.json();
+  } catch {
+    statusEl.innerHTML = '';
+    listEl.innerHTML = '<div class="err">❌ Server unreachable.</div>';
+    return;
+  }
+
+  statusEl.innerHTML = '';
+  const stations = data.results || [];
+
+  if (!stations.length) {
+    listEl.innerHTML = '<div class="err">No police stations found within 10 km of your location.</div>';
+    return;
+  }
+
+  stations.forEach(s => addPin(s.lat, s.lon, s.name, s.distance_km));
+  listEl.innerHTML = stations.map(buildCard).join('');
+}
+
+main();
+</script>
+</body>
+</html>

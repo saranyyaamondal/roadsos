@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SurakshaRoad — First Aid</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root{--red:#C62828;--bg:#F7F7F7;--card:#fff;--text:#1A1A1A;--muted:#757575;--border:#E0E0E0;--radius:14px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh}
+  header{background:#2E7D32;color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+  header h1{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800}
+  .back-btn{background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:14px}
+  .offline-note{text-align:center;font-size:12px;color:var(--muted);padding:10px 16px}
+  .content{max-width:500px;margin:0 auto;padding:0 16px 24px}
+  .fa-tabs{display:flex;gap:8px;margin-bottom:14px}
+  .fa-tab{padding:8px 16px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--card);color:var(--muted);transition:all .15s}
+  .fa-tab.active{background:var(--red);color:#fff;border-color:var(--red)}
+  .fa-panel{display:none}
+  .fa-panel.active{display:block}
+  .fa-step{background:var(--card);border-radius:var(--radius);padding:14px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+  .step-num{width:30px;height:30px;background:var(--red);color:#fff;border-radius:50%;font-family:'Baloo 2',cursive;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .step-body strong{font-size:14px;font-weight:700}
+  .step-body p{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5}
+</style>
+</head>
+<body>
+<header>
+  <button class="back-btn" onclick="history.back()">← Back</button>
+  <h1>🩹 First Aid Guide</h1>
+</header>
+<div class="offline-note">✅ Fully offline — follow these steps while waiting for help</div>
+<div class="content">
+  <div class="fa-tabs" style="flex-wrap:wrap;">
+  <button class="fa-tab active" onclick="setTab(this,'bleeding')">🩸 Bleeding</button>
+  <button class="fa-tab" onclick="setTab(this,'fracture')">🦴 Fracture</button>
+  <button class="fa-tab" onclick="setTab(this,'unconscious')">😵 Unconscious</button>
+  <button class="fa-tab" onclick="setTab(this,'burns')">🔥 Burns</button>
+  <button class="fa-tab" onclick="setTab(this,'choking')">🫁 Choking</button>
+  <button class="fa-tab" onclick="setTab(this,'heart_attack')">❤️ Heart Attack</button>
+  <button class="fa-tab" onclick="setTab(this,'seizure')">⚡ Seizure</button>
+  <button class="fa-tab" onclick="setTab(this,'drowning')">💧 Drowning</button>
+</div>
+
+<!-- add panels for each new category -->
+<div id="fa-burns"        class="fa-panel"></div>
+<div id="fa-choking"      class="fa-panel"></div>
+<div id="fa-heart_attack" class="fa-panel"></div>
+<div id="fa-seizure"      class="fa-panel"></div>
+<div id="fa-drowning"     class="fa-panel"></div>
+
+<script type="module">
+  import { CONFIG } from './js/config.js';
+  if (!CONFIG.requireAuth()) throw new Error('Not authenticated');
+</script>
+<script>
+let _data = null;
+
+async function loadData() {
+  if (_data) return _data;
+  try {
+    const r = await fetch('data/firstaid.json');
+    _data = await r.json();
+    return _data;
+  } catch {
+    return null;
+  }
+}
+
+async function renderTab(cat) {
+  const data = await loadData();
+  const container = document.getElementById('fa-' + cat);
+  if (!data || !data[cat]) return;
+  container.innerHTML = data[cat].map((s, i) => `
+    <div class="fa-step">
+      <div class="step-num">${i+1}</div>
+      <div class="step-body">
+        <strong>${s.title}</strong>
+        ${s.detail ? `<p>${s.detail}</p>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function setTab(el, cat) {
+  document.querySelectorAll('.fa-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.fa-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('fa-' + cat).classList.add('active');
+  renderTab(cat);
+}
+
+window.addEventListener('load', () => renderTab('bleeding'));
+</script>
+</body>
+</html>
