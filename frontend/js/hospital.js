@@ -1,7 +1,7 @@
 // ─── hospital.js ──────────────────────────────────────────────
 import { initMap, addDestinationMarker, fitMapBounds } from './map.js';
 
-const BACKEND_URL = window.BACKEND_URL ?? 'https://suraksharoad.onrender.com';
+const BACKEND_URL = window.BACKEND_URL ?? 'http://localhost:3000';
 const ORS_API_KEY = window.ORS_API_KEY ?? '';  // set via <script> before this module
 
 // ─── GPS ──────────────────────────────────────────────────────
