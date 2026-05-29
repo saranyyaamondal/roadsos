@@ -6,49 +6,70 @@
 <title>SurakshaRoad — Medical Card</title>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-  :root{--red:#C62828;--red-light:#FFEBEE;--green:#2E7D32;--green-light:#E8F5E9;--bg:#F7F7F7;--card:#fff;--text:#1A1A1A;--muted:#757575;--border:#E0E0E0;--radius:14px}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh}
-  header{background:var(--red);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-  header h1{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800}
-  .back-btn{background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:14px}
-  .content{max-width:500px;margin:0 auto;padding:16px}
-  .offline-badge{background:var(--green-light);color:var(--green);border-radius:6px;padding:6px 12px;font-size:12px;font-weight:700;text-align:center;margin-bottom:14px}
-  .card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:14px}
-  .mc-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-  .mc-avatar{width:52px;height:52px;background:var(--red-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-weight:800;font-size:16px;color:var(--red);flex-shrink:0}
-  .mc-name{font-weight:800;font-size:16px}
-  .mc-detail{font-size:12px;color:var(--muted);margin-top:2px}
-  .mc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-  .mc-field label{font-size:11px;color:var(--muted);font-weight:700;display:block;margin-bottom:3px}
-  .mc-val{font-size:15px;font-weight:800}
-  .mc-val.blood{color:var(--red)}
-  .mc-field p{font-size:13px;font-weight:700}
-  .mc-full{margin-bottom:10px}
-  .mc-full label{font-size:11px;color:var(--muted);font-weight:700;display:block;margin-bottom:3px}
-  .mc-full p{font-size:13px;font-weight:700}
-  .btn-whatsapp{display:block;width:100%;padding:14px;background:#25D366;color:#fff;border:none;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;text-align:center;box-shadow:0 4px 14px rgba(37,211,102,.35);margin-top:4px}
-  .btn-whatsapp:hover{background:#1ebe57}
+:root{--red:#C62828;--red-l:#FFEBEE;--green:#2E7D32;--green-l:#E8F5E9;--bg:#F7F7F7;--card:#fff;--border:#E0E0E0;--r:14px;--muted:#757575}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh;padding-bottom:2rem}
+header{background:var(--red);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(198,40,40,.3)}
+header h1{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;flex:1}
+.back{background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700}
+.wrap{max-width:480px;margin:0 auto;padding:16px}
+.offline-badge{background:var(--green-l);color:var(--green);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;text-align:center;margin-bottom:14px;border:1.5px solid #A5D6A7}
+.card{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.08);margin-bottom:14px;border:1.5px solid var(--border)}
+/* Header row */
+.mc-header{display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:14px;border-bottom:1.5px solid var(--border)}
+.mc-avatar{width:54px;height:54px;background:var(--red-l);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-weight:800;font-size:18px;color:var(--red);flex-shrink:0}
+.mc-name{font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:#1a1a2e;line-height:1.1}
+.mc-sub{font-size:12px;color:var(--muted);margin-top:3px}
+/* Grid */
+.mc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.mc-field label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px}
+.mc-val{font-size:18px;font-weight:800}
+.mc-val.blood{color:var(--red)}
+.mc-field p{font-size:14px;font-weight:700;color:#1a1a2e}
+/* Full width rows */
+.mc-full{padding:10px 0;border-top:1px solid #f0f0f0}
+.mc-full label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px}
+.mc-full p{font-size:13px;font-weight:700;color:#1a1a2e}
+/* Empty state */
+.empty-state{text-align:center;padding:2rem;color:var(--muted)}
+.empty-state .icon{font-size:3rem;margin-bottom:1rem}
+.empty-state h3{font-size:1.1rem;font-weight:700;margin-bottom:.5rem;color:#333}
+.empty-state p{font-size:.85rem;line-height:1.5}
+.empty-state a{display:inline-block;margin-top:1rem;padding:.75rem 1.5rem;background:var(--red);color:#fff;border-radius:10px;text-decoration:none;font-weight:800;font-size:.9rem}
+/* WhatsApp button */
+.btn-wa{display:block;width:100%;padding:15px;background:#25D366;color:#fff;border:none;border-radius:var(--r);font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;text-align:center;box-shadow:0 4px 14px rgba(37,211,102,.35);transition:all .2s}
+.btn-wa:hover{background:#1ebe57;transform:translateY(-1px)}
 </style>
 </head>
 <body>
+
 <header>
-  <button class="back-btn" onclick="history.back()">← Back</button>
-  <h1>My Medical Card</h1>
+  <button class="back" onclick="history.back()">← Back</button>
+  <h1>🪪 My Medical Card</h1>
 </header>
-<div class="content">
+
+<div class="wrap">
   <div class="offline-badge">✅ Works offline — no login needed</div>
-  <div class="card" id="screen-medcard">
+
+  <div id="no-profile" class="card empty-state" style="display:none">
+    <div class="icon">📋</div>
+    <h3>No profile found</h3>
+    <p>You haven't signed up yet. Create your profile so paramedics can help you faster.</p>
+    <a href="signup.html">Set Up Profile →</a>
+  </div>
+
+  <div id="profile-card" class="card" style="display:none">
     <div class="mc-header">
       <div class="mc-avatar" id="mc-avatar">?</div>
       <div>
-        <div class="mc-name" id="mc-name">Loading…</div>
-        <div class="mc-detail" id="mc-detail"></div>
+        <div class="mc-name" id="mc-name">—</div>
+        <div class="mc-sub" id="mc-sub">—</div>
       </div>
     </div>
+
     <div class="mc-grid">
       <div class="mc-field">
-        <label>Blood group</label>
+        <label>Blood Group</label>
         <div class="mc-val blood" id="mc-blood">—</div>
       </div>
       <div class="mc-field">
@@ -64,8 +85,9 @@
         <p id="mc-medication">—</p>
       </div>
     </div>
+
     <div class="mc-full">
-      <label>Emergency contact</label>
+      <label>Emergency Contact</label>
       <p id="mc-ec">—</p>
     </div>
     <div class="mc-full">
@@ -73,55 +95,97 @@
       <p id="mc-insurance">—</p>
     </div>
   </div>
-  <button class="btn-whatsapp" onclick="shareViaWhatsApp()">
-    💬 Share medical card via WhatsApp
+
+  <button class="btn-wa" id="wa-btn" style="display:none" onclick="shareViaWhatsApp()">
+    💬 Share Medical Card via WhatsApp
   </button>
 </div>
 
-<script type="module">
-  import { CONFIG } from './js/config.js';
-  if (!CONFIG.requireAuth()) throw new Error('Not authenticated');
-</script>
-<script src="js/profile-bridge.js"></script>
 <script>
-  // Force re-bridge every time medical card opens
-localStorage.removeItem('surakshaProfile');
-bridgeProfileToM2Format(); // rebuild fresh from sr_* keys
-function loadProfile() {
-  try {
-    const raw = localStorage.getItem('surakshaProfile');
-    return raw ? JSON.parse(raw) : null;
-  } catch { return null; }
-}
-
+// Read directly from M1's sr_* localStorage keys — no bridge needed
 function populate() {
-  const p = loadProfile();
-  if (!p) {
-    document.getElementById('mc-name').textContent = 'No profile found';
+  const name      = localStorage.getItem('sr_name');
+  const age       = localStorage.getItem('sr_age')        || '';
+  const gender    = localStorage.getItem('sr_gender')     || '';
+  const phone     = localStorage.getItem('sr_phone')      || '';
+  const blood     = localStorage.getItem('sr_blood')      || '—';
+  const allergies = localStorage.getItem('sr_allergies')  || 'None';
+  const cond      = localStorage.getItem('sr_conditions') || 'None';
+  const meds      = localStorage.getItem('sr_medications')|| 'None';
+  const ecName    = localStorage.getItem('sr_ec_name')    || '';
+  const ecRel     = localStorage.getItem('sr_ec_rel')     || '';
+  const ecPhone   = localStorage.getItem('sr_ec_phone')   || '';
+  const insurer   = localStorage.getItem('sr_insurance')  || 'Not provided';
+  const policy    = localStorage.getItem('sr_policy')     || '';
+  const signedUp  = localStorage.getItem('sr_signup_done') === 'true';
+
+  if (!signedUp || !name) {
+    document.getElementById('no-profile').style.display = 'block';
     return;
   }
-  const initials = (p.name||'').trim().split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  document.getElementById('mc-avatar').textContent    = initials || '?';
-  document.getElementById('mc-name').textContent      = p.name       || 'Unknown';
-  document.getElementById('mc-detail').textContent    = [p.gender, p.age ? p.age+' yrs' : '', p.phone].filter(Boolean).join(' · ');
-  document.getElementById('mc-blood').textContent     = p.bloodGroup  || '—';
-  document.getElementById('mc-allergy').textContent   = p.allergy     || 'None';
-  document.getElementById('mc-condition').textContent = p.condition   || 'None';
-  document.getElementById('mc-medication').textContent= p.medication  || 'None';
-  document.getElementById('mc-ec').textContent        = (p.ecName||'Not set') + (p.ecRelation ? ' ('+p.ecRelation+')' : '') + (p.ecPhone ? ' · '+p.ecPhone : '');
-  document.getElementById('mc-insurance').textContent = (p.insurer||'Not provided') + (p.policyNo ? ' · '+p.policyNo : '');
+
+  // Show card
+  document.getElementById('profile-card').style.display = 'block';
+  document.getElementById('wa-btn').style.display = 'block';
+
+  // Avatar initials
+  const initials = name.trim().split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('mc-avatar').textContent = initials;
+
+  // Name
+  document.getElementById('mc-name').textContent = name;
+
+  // Sub line
+  const parts = [gender, age ? age + ' yrs' : '', phone].filter(Boolean);
+  document.getElementById('mc-sub').textContent = parts.join(' · ');
+
+  // Medical fields
+  document.getElementById('mc-blood').textContent    = blood;
+  document.getElementById('mc-allergy').textContent  = allergies;
+  document.getElementById('mc-condition').textContent= cond;
+  document.getElementById('mc-medication').textContent= meds;
+
+  // Emergency contact
+  let ecText = ecName;
+  if (ecRel)   ecText += ` (${ecRel})`;
+  if (ecPhone) ecText += ` · ${ecPhone}`;
+  document.getElementById('mc-ec').textContent = ecText || 'Not set';
+
+  // Insurance
+  document.getElementById('mc-insurance').textContent =
+    insurer + (policy ? ` · ${policy}` : '');
 }
 
 function shareViaWhatsApp() {
-  const p = loadProfile();
-  const msg = p
-    ? `🚨 *MEDICAL CARD — SurakshaRoad*\n\n*Patient:* ${p.name||'Unknown'}\n*Blood:* ${p.bloodGroup||'—'}\n*Allergy:* ${p.allergy||'None'}\n*Condition:* ${p.condition||'None'}\n*Medication:* ${p.medication||'None'}\n*Emergency Contact:* ${p.ecName||'Not set'}${p.ecPhone?' — '+p.ecPhone:''}\n*Insurance:* ${p.insurer||'Not provided'}${p.policyNo?' / '+p.policyNo:''}`
-    : '🚨 *MEDICAL CARD — SurakshaRoad*\n\nNo profile saved yet.';
+  const name    = localStorage.getItem('sr_name')       || 'Unknown';
+  const blood   = localStorage.getItem('sr_blood')      || '—';
+  const allergy = localStorage.getItem('sr_allergies')  || 'None';
+  const cond    = localStorage.getItem('sr_conditions') || 'None';
+  const meds    = localStorage.getItem('sr_medications')|| 'None';
+  const ecName  = localStorage.getItem('sr_ec_name')    || '';
+  const ecPhone = localStorage.getItem('sr_ec_phone')   || '';
+  const insurer = localStorage.getItem('sr_insurance')  || '';
+  const policy  = localStorage.getItem('sr_policy')     || '';
+  const lat     = localStorage.getItem('lat');
+  const lon     = localStorage.getItem('lon');
+  const maps    = lat && lon ? `https://maps.google.com/?q=${lat},${lon}` : 'Location unavailable';
+
+  const msg =
+    `🚨 *MEDICAL CARD — SurakshaRoad*\n\n` +
+    `*Patient:* ${name}\n` +
+    `*Blood Group:* ${blood}\n` +
+    `*Allergies:* ${allergy}\n` +
+    `*Condition:* ${cond}\n` +
+    `*Medication:* ${meds}\n` +
+    `*Emergency Contact:* ${ecName}${ecPhone ? ' — ' + ecPhone : ''}\n` +
+    `*Insurance:* ${insurer}${policy ? ' / ' + policy : ''}\n` +
+    `*Last Known Location:* ${maps}`;
+
   window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
 }
 
-window.addEventListener('load', populate);
+// Run on load
+populate();
 </script>
-
 </body>
 </html>

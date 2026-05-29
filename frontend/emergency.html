@@ -13,7 +13,8 @@ header{background:var(--red);color:#fff;padding:14px 16px;display:flex;align-ite
 header h1{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;flex:1}
 .back{background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px}
 .wrap{max-width:480px;margin:0 auto;padding:14px}
-/* SOS */
+
+/* SOS block */
 .sos-block{background:var(--red);border-radius:var(--r);padding:20px;text-align:center;margin-bottom:14px;box-shadow:0 4px 20px rgba(198,40,40,.4)}
 .sos-badge{background:#fff;color:var(--red);font-family:'Baloo 2',cursive;font-weight:800;font-size:16px;padding:3px 12px;border-radius:6px;display:inline-block;margin-bottom:8px}
 .sos-block h2{color:#fff;font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;margin-bottom:4px}
@@ -21,7 +22,8 @@ header h1{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;flex:1}
 .btn-sos{display:block;width:100%;margin-top:14px;padding:15px;background:#fff;color:var(--red);border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:transform .15s}
 .btn-sos:active{transform:scale(.97)}
 .btn-sos:disabled{opacity:.6;cursor:not-allowed}
-/* ACTION GRID */
+
+/* Action grid */
 .a-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
 .a-btn{background:var(--card);border-radius:12px;padding:12px 6px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);cursor:pointer;border:1.5px solid var(--border);transition:all .2s}
 .a-btn:hover{border-color:var(--red);transform:translateY(-1px)}
@@ -29,7 +31,8 @@ header h1{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;flex:1}
 .a-icon{font-size:1.5rem;margin-bottom:4px}
 .a-name{font-size:12px;font-weight:800;color:#1a1a2e}
 .a-sub{font-size:10px;color:#757575;margin-top:2px}
-/* STATUS */
+
+/* Alert status rows */
 .sec-lbl{font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.8px;margin:14px 0 8px}
 .a-row{background:var(--card);border-radius:10px;padding:12px 14px;display:flex;align-items:center;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .a-info{flex:1}
@@ -38,13 +41,23 @@ header h1{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;flex:1}
 .badge{padding:3px 10px;border-radius:999px;font-size:11px;font-weight:800}
 .b-pending{background:#F5F5F5;color:#757575}
 .b-sent{background:var(--green-l);color:var(--green)}
+.b-fail{background:var(--red-l);color:var(--red)}
 .b-live{background:var(--red-l);color:var(--red);animation:bl 1.4s infinite}
 @keyframes bl{0%,100%{opacity:1}50%{opacity:.4}}
-/* LIVE BOX */
+
+/* Medical summary preview */
+.med-preview{background:#FFF8E1;border:1.5px solid #FFE082;border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:12px;line-height:1.7;color:#333}
+.med-preview strong{font-size:11px;color:#E65100;font-weight:800;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Live location box */
 .live-box{background:var(--red-l);border:1.5px solid #FFCDD2;border-radius:10px;padding:12px 14px;margin-bottom:8px;display:none}
 .live-box.on{display:block}
 .live-box a{color:var(--red);font-weight:700;font-size:13px}
 .live-timer{font-size:11px;color:#757575;margin-top:4px}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;padding:10px 20px;border-radius:999px;font-size:13px;font-weight:700;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
 </style>
 </head>
 <body>
@@ -56,15 +69,19 @@ header h1{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;flex:1}
 
   <div class="sos-block">
     <div class="sos-badge">SOS</div>
-    <h2>Call 112 + Ambulance</h2>
-    <p>Triggers call, WhatsApp alert and live location simultaneously</p>
-    <button class="btn-sos" id="sos-btn" onclick="triggerSOS()">
-      🚨 TAP TO TRIGGER EMERGENCY
-    </button>
+    <h2>Call 112 + Alert Contact</h2>
+    <p>Sends your GPS + medical info to your emergency contact via SMS &amp; WhatsApp</p>
+    <button class="btn-sos" id="sos-btn">🚨 TAP TO TRIGGER EMERGENCY</button>
+  </div>
+
+  <!-- Medical summary shown to user so they know what's being sent -->
+  <div class="med-preview" id="med-preview">
+    <strong>📋 Medical info being sent automatically</strong>
+    <span id="med-summary-text">Loading…</span>
   </div>
 
   <div class="a-grid">
-    <div class="a-btn" id="ab-wa"  onclick="sendWhatsApp()">
+    <div class="a-btn" id="ab-wa" onclick="sendAlertManual()">
       <div class="a-icon">💬</div><div class="a-name">WhatsApp</div><div class="a-sub">Alert contacts</div>
     </div>
     <div class="a-btn" id="ab-loc" onclick="shareLiveLocation()">
@@ -84,11 +101,11 @@ header h1{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;flex:1}
   <div class="sec-lbl">Alert Status</div>
 
   <div class="a-row">
-    <div class="a-info"><strong>Ambulance 108</strong><p id="t-amb">Waiting…</p></div>
-    <span class="badge b-pending" id="s-amb">Pending</span>
+    <div class="a-info"><strong>SMS to emergency contact</strong><p id="t-sms">Waiting…</p></div>
+    <span class="badge b-pending" id="s-sms">Pending</span>
   </div>
   <div class="a-row">
-    <div class="a-info"><strong id="ec-lbl">Emergency Contact</strong><p id="t-wa">Waiting…</p></div>
+    <div class="a-info"><strong id="ec-lbl">WhatsApp alert</strong><p id="t-wa">Waiting…</p></div>
     <span class="badge b-pending" id="s-wa">Pending</span>
   </div>
   <div class="a-row">
@@ -101,20 +118,33 @@ header h1{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;flex:1}
   </div>
 
 </div>
+<div class="toast" id="toast"></div>
 
-<script>
-// Read profile
-const name    = localStorage.getItem('sr_name')       || 'Unknown';
-const blood   = localStorage.getItem('sr_blood')      || '—';
-const allergy = localStorage.getItem('sr_allergies')  || 'None';
-const cond    = localStorage.getItem('sr_conditions') || 'None';
-const ecName  = localStorage.getItem('sr_ec_name')    || 'Emergency Contact';
-const ecPhone = localStorage.getItem('sr_ec_phone')   || '';
-const lat     = parseFloat(localStorage.getItem('lat')) || null;
-const lon     = parseFloat(localStorage.getItem('lon')) || null;
+<script type="module">
+import { CONFIG } from './js/config.js';
+CONFIG.requireAuth();
 
-document.getElementById('ec-lbl').textContent = ecName;
+// ── Read profile from localStorage ──────────────────
+const name      = localStorage.getItem('sr_name')        || 'Unknown';
+const blood     = localStorage.getItem('sr_blood')       || '—';
+const allergies = localStorage.getItem('sr_allergies')   || 'None';
+const conditions= localStorage.getItem('sr_conditions')  || 'None';
+const meds      = localStorage.getItem('sr_medications') || 'None';
+const ecName    = localStorage.getItem('sr_ec_name')     || 'Emergency Contact';
+const ecPhone   = localStorage.getItem('sr_ec_phone')    || '';
+const lat       = parseFloat(localStorage.getItem('lat')) || null;
+const lon       = parseFloat(localStorage.getItem('lon')) || null;
 
+// Build medical summary string (sent via SMS/WhatsApp)
+const medicalSummary =
+  `Patient: ${name} | Blood: ${blood} | Allergies: ${allergies} | ` +
+  `Conditions: ${conditions} | Medications: ${meds}`;
+
+// Show it on screen so user knows it's being sent
+document.getElementById('med-summary-text').textContent = medicalSummary;
+document.getElementById('ec-lbl').textContent = `WhatsApp to ${ecName}`;
+
+// ── Helpers ──────────────────────────────────────────
 function setStatus(id, label, cls, text) {
   const b = document.getElementById('s-' + id);
   const t = document.getElementById('t-' + id);
@@ -122,47 +152,86 @@ function setStatus(id, label, cls, text) {
   if (t) t.textContent = text;
 }
 
-async function triggerSOS() {
-  const btn = document.getElementById('sos-btn');
-  btn.disabled    = true;
-  btn.textContent = '🔄 Triggering…';
-  triggerCall();
-  sendWhatsApp();
-  shareLiveLocation();
-  btn.textContent = '✅ Emergency Triggered';
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-function triggerCall() {
-  window.location.href = 'tel:112';
-  setStatus('call', 'Dialling', 'b-sent', 'Calling 112');
-  document.getElementById('ab-wa')?.classList.add('done');
+// ── Send alert via backend (Twilio SMS + WhatsApp) ───
+async function sendBackendAlert() {
+  if (!ecPhone) {
+    setStatus('sms', 'No contact', 'b-fail', 'No emergency contact saved in profile');
+    setStatus('wa',  'No contact', 'b-fail', 'No emergency contact saved in profile');
+    return;
+  }
+  if (!lat || !lon) {
+    setStatus('sms', 'No GPS', 'b-fail', 'GPS not available');
+    setStatus('wa',  'No GPS', 'b-fail', 'GPS not available');
+    return;
+  }
+
+  setStatus('sms', 'Sending…', 'b-pending', 'Contacting server…');
+  setStatus('wa',  'Sending…', 'b-pending', 'Contacting server…');
+
+  try {
+    const res = await fetch(CONFIG.API_BASE + '/api/alert', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        lat,
+        lon,
+        medicalSummary,
+        emergencyContact: ecPhone
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      setStatus('sms', 'Sent ✓', 'b-sent', `SMS delivered to ${ecPhone}`);
+      setStatus('wa',  'Sent ✓', 'b-sent', `WhatsApp sent to ${ecName}`);
+      showToast('✅ Alert sent to ' + ecName);
+    } else {
+      setStatus('sms', 'Failed', 'b-fail', data.error || 'Server error');
+      setStatus('wa',  'Failed', 'b-fail', data.detail || 'Check Twilio config');
+      showToast('❌ Alert failed: ' + (data.error || 'Unknown error'));
+    }
+
+  } catch (err) {
+    setStatus('sms', 'Failed', 'b-fail', 'Server unreachable — check connection');
+    setStatus('wa',  'Failed', 'b-fail', 'Server unreachable — check connection');
+    showToast('❌ Could not reach server');
+    console.error('Alert error:', err);
+  }
 }
 
-function sendWhatsApp() {
+// ── Manual WhatsApp fallback (grid button) ───────────
+window.sendAlertManual = function() {
   const maps = lat && lon ? `https://maps.google.com/?q=${lat},${lon}` : 'Location unavailable';
-  const msg  =
+  const msg =
     `🚨 *EMERGENCY — SurakshaRoad*\n\n` +
     `*${name}* has been in a road accident.\n\n` +
     `📍 *Location:* ${maps}\n` +
     `🩸 *Blood:* ${blood}\n` +
-    `⚠️ *Allergy:* ${allergy}\n` +
-    `🏥 *Condition:* ${cond}\n\n` +
+    `⚠️ *Allergies:* ${allergies}\n` +
+    `🏥 *Conditions:* ${conditions}\n` +
+    `💊 *Medications:* ${meds}\n\n` +
     `Please call emergency services immediately.`;
 
   const num = ecPhone.replace(/\s/g,'').replace('+','');
   const url = num
     ? `https://wa.me/${num}?text=${encodeURIComponent(msg)}`
     : `https://wa.me/?text=${encodeURIComponent(msg)}`;
-
   window.open(url, '_blank');
-  setStatus('wa', 'Sent', 'b-sent', `WhatsApp sent to ${ecName}`);
-  setStatus('amb', 'Sent', 'b-sent', 'SMS with GPS sent');
   document.getElementById('ab-wa')?.classList.add('done');
-}
+};
 
-function shareLiveLocation() {
+// ── Live location ─────────────────────────────────────
+window.shareLiveLocation = function() {
   if (!lat || !lon) {
-    setStatus('loc', 'No GPS', 'b-pending', 'GPS not available');
+    setStatus('loc', 'No GPS', 'b-fail', 'GPS not available');
     return;
   }
   const url = `https://maps.google.com/?q=${lat},${lon}`;
@@ -170,7 +239,6 @@ function shareLiveLocation() {
   const lnk = document.getElementById('live-link');
   if (box) box.classList.add('on');
   if (lnk) lnk.href = url;
-
   setStatus('loc', 'Live', 'b-live', 'Active for 30 minutes');
   document.getElementById('ab-loc')?.classList.add('done');
 
@@ -187,12 +255,25 @@ function shareLiveLocation() {
       if (box) box.classList.remove('on');
     }
   }, 1000);
-}
-</script>
+};
 
-<script type="module">
-  import { CONFIG } from './js/config.js';
-  CONFIG.requireAuth();
+// ── SOS button — does everything at once ─────────────
+document.getElementById('sos-btn').addEventListener('click', async function() {
+  this.disabled = true;
+  this.textContent = '🔄 Triggering…';
+
+  // 1. Call 112
+  window.location.href = 'tel:112';
+  setStatus('call', 'Dialling', 'b-sent', 'Calling 112 now');
+
+  // 2. Send SMS + WhatsApp via backend
+  await sendBackendAlert();
+
+  // 3. Share live location
+  shareLiveLocation();
+
+  this.textContent = '✅ Emergency Triggered';
+});
 </script>
 </body>
 </html>
