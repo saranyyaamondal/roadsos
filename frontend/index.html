@@ -15,7 +15,33 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh;paddi
 .logo-i img{width:50px;height:50px}
 .logo-n{font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;line-height:1}
 .logo-s{font-size:11px;opacity:.8}
-.lang-b{margin-left:auto;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:3px 10px;font-size:.72rem;font-weight:700;cursor:pointer}
+/* Push the entire group to the right */
+.hdr-right {
+  margin-left: auto;
+  display: flex;
+  gap: 8px; /* Space between EN and Edit Profile */
+  align-items: center;
+}
+
+.lang-b {
+  background: rgba(255, 255, 255, .2);
+  border: 1px solid rgba(255, 255, 255, .4);
+  border-radius: 999px;
+  padding: 4px 12px; /* Balanced padding */
+  font-size: .72rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap; /* Prevents text wrapping */
+}
+
+.lang-b a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.lang-b:hover {
+  background: rgba(255, 255, 255, .3);
+}
 /* CONTENT */
 .wrap{max-width:480px;margin:0 auto;padding:14px 14px}
 /* LOCATION */
@@ -73,7 +99,11 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh;paddi
     <div class="logo-n">SurakshaRoad</div>
     <div class="logo-s">Emergency Road Safety</div>
   </div>
-  <span class="lang-b" id="lang-badge">EN</span>
+  
+  <div class="hdr-right">
+    <span class="lang-b" id="lang-badge">EN</span>
+    <span class="lang-b"><a href="edit-profile.html">✏️ Edit Profile</a></span>
+  </div>
 </div>
 
 <div class="wrap">
@@ -167,5 +197,6 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh;paddi
 
 </main>
   <script src="../js/language.js"></script>
+  <script src="js/profile-fix.js"></script>
 </body>
 </html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SurakshaRoad — Edit Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{--red:#C62828;--red-l:#FFEBEE;--green:#2E7D32;--green-l:#E8F5E9;--bg:#F7F7F7;--card:#fff;--border:#E0E0E0;--r:14px;--muted:#757575}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh;padding-bottom:3rem}
+header{background:var(--red);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+header h1{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;flex:1}
+.back{background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700}
+.wrap{max-width:480px;margin:0 auto;padding:16px}
+
+.section{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.07);border:1.5px solid var(--border)}
+.section-title{font-size:12px;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px}
+
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+.field input, .field select{
+  width:100%;padding:11px 13px;border:1.5px solid var(--border);
+  border-radius:10px;font-family:'Nunito',sans-serif;font-size:14px;
+  font-weight:600;background:#FAFAFA;color:#1a1a2e;
+  transition:border .2s;
+}
+.field input:focus, .field select:focus{outline:none;border-color:var(--red);background:#fff}
+
+/* Phone field with +91 prefix */
+.phone-wrap{display:flex;align-items:center;gap:0}
+.phone-prefix{
+  padding:11px 12px;background:#f0f0f0;border:1.5px solid var(--border);
+  border-right:none;border-radius:10px 0 0 10px;
+  font-size:14px;font-weight:700;color:#555;white-space:nowrap;
+}
+.phone-wrap input{border-radius:0 10px 10px 0;border-left:none}
+.phone-wrap input:focus{border-color:var(--red)}
+
+.phone-note{font-size:11px;color:var(--muted);margin-top:4px}
+.phone-note.warn{color:#E65100;font-weight:700}
+.phone-note.ok{color:var(--green);font-weight:700}
+
+.btn-save{
+  display:block;width:100%;padding:15px;
+  background:var(--red);color:#fff;border:none;
+  border-radius:var(--r);font-family:'Nunito',sans-serif;
+  font-size:16px;font-weight:800;cursor:pointer;
+  box-shadow:0 4px 16px rgba(198,40,40,.35);
+  transition:background .2s;
+}
+.btn-save:hover{background:#a82020}
+
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:#1a1a2e;color:#fff;padding:10px 22px;border-radius:999px;
+  font-size:13px;font-weight:700;z-index:999;
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <button class="back" onclick="history.back()">← Back</button>
+  <h1>✏️ Edit Profile</h1>
+</header>
+<div class="wrap">
+
+  <!-- Personal info -->
+  <div class="section">
+    <div class="section-title">👤 Personal Info</div>
+    <div class="field">
+      <label>Full name</label>
+      <input type="text" id="f-name" placeholder="Your full name"/>
+    </div>
+    <div class="field">
+      <label>Blood group</label>
+      <select id="f-blood">
+        <option value="">Select blood group</option>
+        <option>A+</option><option>A-</option>
+        <option>B+</option><option>B-</option>
+        <option>AB+</option><option>AB-</option>
+        <option>O+</option><option>O-</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Medical info -->
+  <div class="section">
+    <div class="section-title">🏥 Medical Info</div>
+    <div class="field">
+      <label>Known allergies</label>
+      <input type="text" id="f-allergies" placeholder="e.g. Penicillin, Peanuts (or None)"/>
+    </div>
+    <div class="field">
+      <label>Chronic conditions</label>
+      <input type="text" id="f-conditions" placeholder="e.g. Diabetes, Hypertension (or None)"/>
+    </div>
+    <div class="field">
+      <label>Current medications</label>
+      <input type="text" id="f-medications" placeholder="e.g. Metformin 500mg (or None)"/>
+    </div>
+    <div class="field">
+      <label>Insurance provider</label>
+      <input type="text" id="f-insurance" placeholder="e.g. Star Health / LIC (or None)"/>
+    </div>
+  </div>
+
+  <!-- Emergency contact -->
+  <div class="section">
+    <div class="section-title">📞 Emergency Contact</div>
+    <div class="field">
+      <label>Contact name</label>
+      <input type="text" id="f-ec-name" placeholder="e.g. Saranya Mondal"/>
+    </div>
+    <div class="field">
+      <label>Contact phone (India mobile)</label>
+      <div class="phone-wrap">
+        <div class="phone-prefix">+91</div>
+        <input type="tel" id="f-ec-phone" placeholder="98765 43210" maxlength="10" inputmode="numeric"/>
+      </div>
+      <div class="phone-note" id="phone-note">Enter 10-digit mobile number — +91 is added automatically</div>
+    </div>
+  </div>
+
+  <button class="btn-save" onclick="saveProfile()">💾 Save Changes</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── Load current values ────────────────────────────
+  function stripCountryCode(phone) {
+    if (!phone) return '';
+    // Remove +91, 0091, leading 0
+    return phone.replace(/^\+91/, '').replace(/^0091/, '').replace(/^0/, '').replace(/\s/g, '').trim();
+  }
+
+  window.addEventListener('load', () => {
+    document.getElementById('f-name').value       = localStorage.getItem('sr_name')        || '';
+    document.getElementById('f-blood').value      = localStorage.getItem('sr_blood')       || '';
+    document.getElementById('f-allergies').value  = localStorage.getItem('sr_allergies')   || '';
+    document.getElementById('f-conditions').value = localStorage.getItem('sr_conditions')  || '';
+    document.getElementById('f-medications').value= localStorage.getItem('sr_medications') || '';
+    document.getElementById('f-insurance').value  = localStorage.getItem('sr_insurance')   || '';
+    document.getElementById('f-ec-name').value    = localStorage.getItem('sr_ec_name')     || '';
+    // Strip +91 from stored number to show just the 10 digits
+    document.getElementById('f-ec-phone').value   = stripCountryCode(localStorage.getItem('sr_ec_phone') || '');
+    validatePhone();
+  });
+
+  // ── Phone validation ───────────────────────────────
+  document.getElementById('f-ec-phone').addEventListener('input', validatePhone);
+
+  function validatePhone() {
+    const val  = document.getElementById('f-ec-phone').value.replace(/\s/g, '');
+    const note = document.getElementById('phone-note');
+    if (!val) {
+      note.textContent = 'Enter 10-digit mobile number — +91 is added automatically';
+      note.className   = 'phone-note';
+      return false;
+    }
+    if (!/^\d{10}$/.test(val)) {
+      note.textContent = '⚠️ Must be exactly 10 digits (no spaces, no country code)';
+      note.className   = 'phone-note warn';
+      return false;
+    }
+    if (!['6','7','8','9'].includes(val[0])) {
+      note.textContent = '⚠️ Indian mobile numbers start with 6, 7, 8, or 9';
+      note.className   = 'phone-note warn';
+      return false;
+    }
+    note.textContent = '✅ Saves as +91' + val;
+    note.className   = 'phone-note ok';
+    return true;
+  }
+
+  // ── Save ───────────────────────────────────────────
+  function saveProfile() {
+    const phoneRaw = document.getElementById('f-ec-phone').value.replace(/\s/g, '');
+
+    if (phoneRaw && !validatePhone()) {
+      showToast('⚠️ Fix the phone number first');
+      return;
+    }
+
+    // Always store phone as +91XXXXXXXXXX
+    const phoneFormatted = phoneRaw ? '+91' + phoneRaw : '';
+
+    localStorage.setItem('sr_name',        document.getElementById('f-name').value.trim());
+    localStorage.setItem('sr_blood',       document.getElementById('f-blood').value);
+    localStorage.setItem('sr_allergies',   document.getElementById('f-allergies').value.trim());
+    localStorage.setItem('sr_conditions',  document.getElementById('f-conditions').value.trim());
+    localStorage.setItem('sr_medications', document.getElementById('f-medications').value.trim());
+    localStorage.setItem('sr_insurance',   document.getElementById('f-insurance').value.trim());
+    localStorage.setItem('sr_ec_name',     document.getElementById('f-ec-name').value.trim());
+    localStorage.setItem('sr_ec_phone',    phoneFormatted);
+
+    showToast('✅ Profile saved!');
+    setTimeout(() => history.back(), 1200);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+</script>
+</body>
+</html>
