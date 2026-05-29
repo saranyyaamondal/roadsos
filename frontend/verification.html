@@ -62,11 +62,11 @@ header h1{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;flex:1}
   <h1>📸 Verify Accident</h1>
 </header>
 <div class="wrap">
-  <div class="info-box">⚠️ A <strong>photo is required</strong> before any alert fires. Claude AI will verify it. You have <strong>60 seconds to cancel</strong> after verification passes.</div>
+  <div class="info-box">⚠️ A <strong>photo is required</strong> before any alert fires. Claude AI will verify it. You have <strong>30 seconds to cancel</strong> after verification passes.</div>
   <div class="steps-list">
     <div class="step-row"><div class="step-n">1</div><div class="step-t"><strong>Take or upload a photo</strong><p>Must clearly show the accident scene</p></div></div>
     <div class="step-row"><div class="step-n">2</div><div class="step-t"><strong>AI verifies the photo</strong><p>Prevents false alerts to emergency services</p></div></div>
-    <div class="step-row"><div class="step-n">3</div><div class="step-t"><strong>60-second cancel window</strong><p>Cancel immediately if it was a mistake</p></div></div>
+    <div class="step-row"><div class="step-n">3</div><div class="step-t"><strong>30-second cancel window</strong><p>Cancel immediately if it was a mistake</p></div></div>
   </div>
   <div class="upload-card">
     <h3>📁 Upload from gallery</h3>
@@ -99,7 +99,7 @@ header h1{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;flex:1}
   <div id="message"></div>
   <div id="timerSection">
     <div class="countdown-box">
-      <div class="countdown-num" id="countdown">60</div>
+      <div class="countdown-num" id="countdown">30</div>
       <div class="countdown-sub">seconds before alert fires</div>
     </div>
     <button class="btn-cancel" id="cancelBtn">✖ Cancel — this was a mistake</button>
@@ -193,7 +193,7 @@ uploadBtn.addEventListener('click', async () => {
     if (d.verified) {
       showMsg('✅ Accident confirmed by AI — alert fires in:', 'success');
       timerSection.style.display = 'block';
-      let s = 60; countdownEl.textContent = s;
+      let s = 30; countdownEl.textContent = s;
       countdownTimer = setInterval(() => {
         s--; countdownEl.textContent = s;
         if (s <= 0) { clearInterval(countdownTimer); const dest=localStorage.getItem('verify_dest')||'emergency.html'; localStorage.removeItem('verify_dest'); window.location.href=dest; }
