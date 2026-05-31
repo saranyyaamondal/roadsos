@@ -28,7 +28,7 @@ SurakshaRoad is a full-stack emergency road safety web application that saves li
 
 | Service | URL |
 |---|---|
-| 🌐 Frontend | roadsos-jade.vercel.app |
+| 🌐 Frontend | https://roadsos-jade.vercel.app |
 | ⚙️ Backend API | https://suraksharoad.onrender.com |
 | 📁 Repository | https://github.com/saranyyaamondal/roadsos |
 
