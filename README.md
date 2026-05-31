@@ -8,7 +8,7 @@
 
 **One-tap emergency response. AI-powered hospital ranking. Works offline.**
 
-[🌐 Live App](roadsos-jade.vercel.app) · [⚙️ Backend API](https://suraksharoad.onrender.com) 
+[🌐 Live App](https://roadsos-jade.vercel.app) · [⚙️ Backend API](https://suraksharoad.onrender.com) 
 
 </div>
 
