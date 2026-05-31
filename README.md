@@ -8,7 +8,7 @@
 
 **One-tap emergency response. AI-powered hospital ranking. Works offline.**
 
-[🌐 Live App](https://roadsos.vercel.app) · [⚙️ Backend API](https://roadsos-backend-production.up.railway.app) · [📋 Documentation](#documentation)
+[🌐 Live App](roadsos-jade.vercel.app) · [⚙️ Backend API](https://suraksharoad.onrender.com) 
 
 </div>
 
@@ -28,8 +28,8 @@ SurakshaRoad is a full-stack emergency road safety web application that saves li
 
 | Service | URL |
 |---|---|
-| 🌐 Frontend | https://roadsos.vercel.app |
-| ⚙️ Backend API | https://roadsos-backend-production.up.railway.app |
+| 🌐 Frontend | roadsos-jade.vercel.app |
+| ⚙️ Backend API | https://suraksharoad.onrender.com |
 | 📁 Repository | https://github.com/saranyyaamondal/roadsos |
 
 ---
@@ -66,7 +66,7 @@ SurakshaRoad is a full-stack emergency road safety web application that saves li
 
 ### Deployment
 - **Vercel** — frontend (auto-deploys from `frontend/` on every push to `main`)
-- **Railway** — backend (auto-deploys from `backend/` on every push to `main`)
+- **Render** — backend (auto-deploys from `backend/` on every push to `main`)
 
 ---
 
