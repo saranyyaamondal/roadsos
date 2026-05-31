@@ -296,19 +296,6 @@ Bystander mode (emergency)
 
 ---
 
-## Team
-
-| Milestone | Scope |
-|---|---|
-| M1 | Signup form, localStorage save, language switcher, progress bar |
-| M2 | Medical card, WhatsApp share, IndexedDB offline cache, First Aid guide |
-| M3 — Anushka Deb | Backend API, Haversine search, all routes, Railway deployment |
-| M4 | Home screen, GPS detection, victim/bystander toggle, routing |
-| M5 | Hospital + police screens, Leaflet maps, ETA calculation |
-| M6 | Claude Vision verify, Claude AI triage, emergency screen, SOS logic |
-
----
-
 ## License
 
 Built for hackathon purposes. All rights reserved by the team.
